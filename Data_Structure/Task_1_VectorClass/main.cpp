@@ -4,7 +4,6 @@
 
 void testConstructors() {
     std::cout << "\n=== Constructors Test ===\n";
-    
     try {
         Vector<int> v1;
         std::cout << "Default constructor: size = " << v1.size() << ", capacity = " << v1.capacity() << std::endl;

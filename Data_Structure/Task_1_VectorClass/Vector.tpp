@@ -142,7 +142,6 @@ void Vector<T>::push_back(const T& value) {
         size_t new_capacity = (capacity_ == 0) ? 1 : capacity_ * 2;
         
         Vector<T> temp;
-
         try {
             temp.data_ = new T[new_capacity];
             temp.capacity_ = new_capacity;

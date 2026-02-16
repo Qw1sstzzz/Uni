@@ -21,7 +21,6 @@ public:
     
     Vector& operator=(const Vector& other);
     Vector& operator=(Vector&& other) noexcept;
-    
     void swap(Vector& other) noexcept;
     
 
