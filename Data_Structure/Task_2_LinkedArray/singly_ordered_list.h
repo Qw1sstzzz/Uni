@@ -12,7 +12,7 @@ private:
 
         Node(const T& value) : data(value), next(nullptr) {}
         Node(T&& value) : data(std::move(value)), next(nullptr) {}
-    } ;
+    };
 
     Node* head_;
     Node* tail_;
