@@ -224,3 +224,79 @@ SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(
         throw;
     }
 }
+
+
+template<typename T>
+SinglyOrderedList<T>& SinglyOrderedList<T>::operator=(const SinglyOrderedList& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    clear();
+
+    if (other.isEmpty()) {
+        return *this
+    }
+
+    try {
+        head_ = new Node(other.head_->data);
+        tail_ = head_;
+        size_ = 1;
+
+        Node* currentOther = other.head_->next;
+        Node* currentThis = head_;
+
+        while (currentOther != nullptr) {
+            Node* newNode = new Node(currentOther->data);
+            currentThis->next = newNode;
+            tail_ = newNode;
+
+            currentThis = newNode;
+            currentOther = currentOther->next;
+            size_++;
+        }
+    }
+    catch (...) {
+        clear();
+        throw;
+    }
+    return *this;
+}
+
+template<typename T>
+SinglyOrderedList<T>& SinglyOrderedList<T>::operator=(SinglyOrderedList&& other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+
+    clear();
+
+    head_ = other.head_;
+    tail_ = other.tail_;
+    size_ = other.size_;
+
+    other.head_ = nullptr;
+    other.tail_ = nullptr;
+    other.size_ = 0;
+
+    return *this;
+}
+
+template<typename T>
+void SinglyOrderedList<T>::print() const {
+    if (isEmpty()) {
+        std::cout << "Empty list" << std::endl;
+        return;
+    }
+
+    std::cout << "List (size = " << size_ << "): ";
+    Node* current = head_;
+    while (current != nullptr) {
+        std::cout << current->data;
+        if (currnet->next != nullptr) {
+            std::cout << " -> ";
+        }
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
