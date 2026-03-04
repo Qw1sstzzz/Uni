@@ -27,3 +27,59 @@ SinglyOrderedList<T>::~SinglyOrderedList() noexcept {
         current = next;
     }
 }
+
+
+template<typename T>
+T& SinglyOrderedList<T>::head() {
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot get head of empty list");
+    }
+    return head_->data;
+}
+
+template<typename T>
+const T& SinglyOrderedList<T>::head() const {
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot get head of empty list");
+    }
+    return head_->data;
+}
+
+template<typename T>
+T& SinglyOrderedList<T>::tail() {
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot get tail of empty list");
+    }
+    return tail_->data;
+}
+
+template<typename T>
+const T& SinglyOrderedList<T>::tail() const {
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot get tail of empty list");
+    }
+    return tail_->data;
+}
+
+template<typename T>
+size_t SinglyOrderedList<T>::size() const {
+    return size_;
+}
+
+template<typename T>
+bool SinglyOrderedList<T>::isEmpty() const {
+    return (head_ == nullptr) && (size_ == 0);
+}
+
+template<typename T>
+void SinglyOrderedList<T>::clear() {
+    Node* current = head_;
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current;
+        current = next;
+    }
+    head_ = nullptr;
+    tail_ = nullptr;
+    size_ = 0;
+}
