@@ -128,3 +128,69 @@ void SinglyOrderedList<T>::insert(const T& value) {
         throw std::runtime_error("Unknown error during insertion");
     }
 }
+
+
+template<typename T>
+bool SinglyOrderedList<T>::search(const T& key) const {
+    Node* current = head_;
+
+    while (current != nullptr) {
+        if (current->data == key) {
+            return true;
+        }
+
+        if (key < current->data) {
+            return false;
+        }
+        current = current->next;
+    }
+    return false;
+}
+
+template<typename T>
+void SinglyOrderedList<T>::removeHead() {
+    if (isEmpty()) {
+        throw std::runtime_error("Cannot remove head from empty list");
+    }
+
+    Node* temp = head_;
+    head_ = head_->next;
+
+    if (head_ == nullptr) {
+        tail_ = nullptr;
+    }
+
+    delete temp;
+    size--;
+}
+
+template<typename T>
+bool SinglyOrderedList<T>::removeKey(const T& key) {
+    if (isEmpty()) {
+        return false;
+    }
+
+    if (head_->data == key) {
+        removeHead();
+        return true;
+    }
+
+    Node* current = head_;
+    while ((current->next != nullptr) && (current->next->data < key)) {
+        current = current->next;
+    }
+
+    if ((current->next != nullptr) && (current->next->data == key)) {
+        Node* temp = current->next;
+        current->next = temp->next;
+
+        if (temp == tail_) {
+            tail_ = current;
+        }
+
+        delete temp;
+        size_--;
+        return true;
+    }
+    return false;
+}
