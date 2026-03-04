@@ -300,3 +300,59 @@ void SinglyOrderedList<T>::print() const {
     }
     std::cout << std::endl;
 }
+
+
+template<typename T>
+bool SinglyOrderedList<T>::operator==(const SinglyOrderedList& other) const {
+    if (size_ != other.size_) {
+        return false;
+    }
+
+    Node* currentThis = head_;
+    Node* currentOther = other.head_;
+
+    while ((currentThis != nullptr) && (currentOther != nullptr)) {
+        if (currentThis->data != currentOther->data) {
+            return false;
+        }
+        currentThis = currentThis->next;
+        currentOther = currentOther->next;
+    }
+    return true;
+}
+
+template<typename U>
+SinglyOrderedList<U> getIntersection(const SinglyOrderedList<U>& list1, const SinglyOrderedList<U>& list2) {
+    SinglyOrderedList<U> result;
+
+    auto* a = list1.head_;
+    auto* b = list2.head_;
+
+    while ((a != nullptr) && (b != nullptr)) {
+        if (a->data < b->data) {
+            a = a->next;
+        }
+        else if (b->data < a->data) {
+            b = b->next;
+        }
+        else {
+            result.insert(a->data);
+            a = a->next;
+            b = b->next;
+        }
+    }
+    return result;
+}
+
+template<typename T>
+void SinglyOrderedList<T>::remove(const SinglyOrderedList& other) {
+    if (isEmpty() || other.isEmpty()) {
+        return;
+    }
+
+    Node* currentOther = other.head_;
+    while (currentOther != nullptr) {
+        removeKey(currentOther->data);
+        currentOther = currentOther-> next
+    }
+}
