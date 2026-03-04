@@ -83,3 +83,48 @@ void SinglyOrderedList<T>::clear() {
     tail_ = nullptr;
     size_ = 0;
 }
+
+
+template<typename T>
+void SinglyOrderedList<T>::insert(const T& value) {
+    Node* newNode = nullptr;
+    try {
+        newNode = new Node(value);
+    } 
+    catch(...) {
+        throw std::runtime_error("Unknown error occurred while creating node");
+    }
+
+    try {
+        if (isEmpty()) {
+            head_ = newNode;
+            tail_ = newNode;
+            size_ = 1;
+            return;
+        }
+
+        if (value < head_->data) {
+            newNode->next = head_;
+            head_ = newNode;
+            size_++;
+            return;
+        }
+
+        Node* current = head_;
+        while ((current->next != nullptr) && (current->next->data < value)) {
+            current = current->next;
+        }
+
+        newNode->next = current->next;
+        current->next = newNode;
+
+        if (newNode->next == nullptr) {
+            tail_ = newNode;
+        }
+        size_++;
+    }
+    catch (...) {
+        delete newNode;
+        throw std::runtime_error("Unknown error during insertion");
+    }
+}
