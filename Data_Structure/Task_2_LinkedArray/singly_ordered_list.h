@@ -23,7 +23,7 @@ public:
     explicit SinglyOrderedList(const T& value);
     SinglyOrderedList(const SinglyOrderedList& other);
     SinglyOrderedList(SinglyOrderedList&& other) noexcept;
-    ~SinglyOrderedList();
+    ~SinglyOrderedList() noexcept;
 
     SinglyOrderedList& operator=(const SinglyOrderedList& other);
     SinglyOrderedList& operator=(SinglyOrderedList&& other) noexcept;
