@@ -194,3 +194,33 @@ bool SinglyOrderedList<T>::removeKey(const T& key) {
     }
     return false;
 }
+
+
+template<typename T>
+SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(nullptr), tail_(nullptr), size_(0) {
+    if (other.isEmpty()) {
+        return;
+    }
+    try {
+        head_ = new Node(other.head_->data);
+        tail_ = head_;
+        size_ = 1;
+
+        Node* currentOther = other.head_->next;
+        Node* currentThis = head_;
+
+        while (currentOther != nullptr) {
+            Node* newNode = newNode(currentOther->data);
+            currentThis->next = newNode;
+            tail_ = newNode;
+
+            currentThis = newNode;
+            currentOther = currentOther->next;
+            size++;
+        }
+    }
+    catch (...) {
+        clear();
+        throw;
+    }
+}
