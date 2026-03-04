@@ -1,4 +1,3 @@
-#include "singly_ordered_list.h"
 #include <cstddef>
 
 template<typename T>
@@ -129,6 +128,49 @@ void SinglyOrderedList<T>::insert(const T& value) {
     }
 }
 
+template<typename T>
+void SinglyOrderedList<T>::insert(T&& value) {
+    Node* newNode = nullptr;
+    try {
+        newNode = new Node(std::move(value));
+    } 
+    catch(...) {
+        throw std::runtime_error("Unknown error occurred while creating node");
+    }
+
+    try {
+        if (isEmpty()) {
+            head_ = newNode;
+            tail_ = newNode;
+            size_ = 1;
+            return;
+        }
+
+        if (newNode->data < head_->data) {
+            newNode->next = head_;
+            head_ = newNode;
+            size_++;
+            return;
+        }
+
+        Node* current = head_;
+        while ((current->next != nullptr) && (current->next->data < newNode->data)) {
+            current = current->next;
+        }
+
+        newNode->next = current->next;
+        current->next = newNode;
+
+        if (newNode->next == nullptr) {
+            tail_ = newNode;
+        }
+        size_++;
+    }
+    catch (...) {
+        delete newNode;
+        throw std::runtime_error("Unknown error during insertion");
+    }
+}
 
 template<typename T>
 bool SinglyOrderedList<T>::search(const T& key) const {
@@ -161,7 +203,7 @@ void SinglyOrderedList<T>::removeHead() {
     }
 
     delete temp;
-    size--;
+    size_--;
 }
 
 template<typename T>
@@ -210,13 +252,13 @@ SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(
         Node* currentThis = head_;
 
         while (currentOther != nullptr) {
-            Node* newNode = newNode(currentOther->data);
+            Node* newNode = new Node(currentOther->data);
             currentThis->next = newNode;
             tail_ = newNode;
 
             currentThis = newNode;
             currentOther = currentOther->next;
-            size++;
+            size_++;
         }
     }
     catch (...) {
@@ -235,7 +277,7 @@ SinglyOrderedList<T>& SinglyOrderedList<T>::operator=(const SinglyOrderedList& o
     clear();
 
     if (other.isEmpty()) {
-        return *this
+        return *this;
     }
 
     try {
@@ -293,7 +335,7 @@ void SinglyOrderedList<T>::print() const {
     Node* current = head_;
     while (current != nullptr) {
         std::cout << current->data;
-        if (currnet->next != nullptr) {
+        if (current->next != nullptr) {
             std::cout << " -> ";
         }
         current = current->next;
@@ -325,8 +367,8 @@ template<typename U>
 SinglyOrderedList<U> getIntersection(const SinglyOrderedList<U>& list1, const SinglyOrderedList<U>& list2) {
     SinglyOrderedList<U> result;
 
-    auto* a = list1.head_;
-    auto* b = list2.head_;
+    typename SinglyOrderedList<U>::Node* a = list1.head_;
+    typename SinglyOrderedList<U>::Node* b = list2.head_;
 
     while ((a != nullptr) && (b != nullptr)) {
         if (a->data < b->data) {
@@ -353,6 +395,6 @@ void SinglyOrderedList<T>::remove(const SinglyOrderedList& other) {
     Node* currentOther = other.head_;
     while (currentOther != nullptr) {
         removeKey(currentOther->data);
-        currentOther = currentOther-> next
+        currentOther = currentOther-> next;
     }
 }
