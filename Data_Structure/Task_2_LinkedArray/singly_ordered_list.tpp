@@ -11,6 +11,35 @@ SinglyOrderedList<T>::SinglyOrderedList(const T& value) : head_(nullptr), tail_(
 }
 
 template<typename T>
+SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(nullptr), tail_(nullptr), size_(0) {
+    if (other.isEmpty()) {
+        return;
+    }
+    try {
+        head_ = new Node(other.head_->data);
+        tail_ = head_;
+        size_ = 1;
+
+        Node* currentOther = other.head_->next;
+        Node* currentThis = head_;
+
+        while (currentOther != nullptr) {
+            Node* newNode = new Node(currentOther->data);
+            currentThis->next = newNode;
+            tail_ = newNode;
+
+            currentThis = newNode;
+            currentOther = currentOther->next;
+            size_++;
+        }
+    }
+    catch (...) {
+        clear();
+        throw std::runtime_error("Unknown exception in copy constructor");
+    }
+}
+
+template<typename T>
 SinglyOrderedList<T>::SinglyOrderedList(SinglyOrderedList&& other) noexcept : head_(other.head_), tail_(other.tail_), size_(other.size_) {
     other.head_ = nullptr;
     other.tail_ = nullptr;
@@ -67,7 +96,7 @@ size_t SinglyOrderedList<T>::size() const {
 
 template<typename T>
 bool SinglyOrderedList<T>::isEmpty() const {
-    return (head_ == nullptr) && (size_ == 0);
+    return head_ == nullptr;
 }
 
 template<typename T>
@@ -122,12 +151,10 @@ void SinglyOrderedList<T>::insert(const T& value) {
         }
 
 
-
         if ((current->next != nullptr) && (current->next->data == value)) {
             delete newNode;
             return;
         } 
-
 
 
         newNode->next = current->next;
@@ -266,35 +293,6 @@ bool SinglyOrderedList<T>::removeKey(const T& key) {
     return false;
 }
 
-
-template<typename T>
-SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(nullptr), tail_(nullptr), size_(0) {
-    if (other.isEmpty()) {
-        return;
-    }
-    try {
-        head_ = new Node(other.head_->data);
-        tail_ = head_;
-        size_ = 1;
-
-        Node* currentOther = other.head_->next;
-        Node* currentThis = head_;
-
-        while (currentOther != nullptr) {
-            Node* newNode = new Node(currentOther->data);
-            currentThis->next = newNode;
-            tail_ = newNode;
-
-            currentThis = newNode;
-            currentOther = currentOther->next;
-            size_++;
-        }
-    }
-    catch (...) {
-        clear();
-        throw std::runtime_error("Unknown exception in copy constructor");
-    }
-}
 
 
 template<typename T>
