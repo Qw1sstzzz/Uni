@@ -102,6 +102,13 @@ void SinglyOrderedList<T>::insert(const T& value) {
             return;
         }
 
+
+        if (value == head_->data) {
+            delete newNode;
+            return;
+        }
+
+
         if (value < head_->data) {
             newNode->next = head_;
             head_ = newNode;
@@ -113,6 +120,15 @@ void SinglyOrderedList<T>::insert(const T& value) {
         while ((current->next != nullptr) && (current->next->data < value)) {
             current = current->next;
         }
+
+
+
+        if ((current->next != nullptr) && (current->next->data == value)) {
+            delete newNode;
+            return;
+        } 
+
+
 
         newNode->next = current->next;
         current->next = newNode;
@@ -146,6 +162,13 @@ void SinglyOrderedList<T>::insert(T&& value) {
             return;
         }
 
+
+        if (newNode->data == head_->data) {
+            delete newNode;
+            return;
+        }
+
+
         if (newNode->data < head_->data) {
             newNode->next = head_;
             head_ = newNode;
@@ -156,6 +179,12 @@ void SinglyOrderedList<T>::insert(T&& value) {
         Node* current = head_;
         while ((current->next != nullptr) && (current->next->data < newNode->data)) {
             current = current->next;
+        }
+
+        
+        if ((current->next != nullptr) && (current->next->data == newNode->data)) {
+            delete newNode;
+            return;
         }
 
         newNode->next = current->next;
@@ -263,7 +292,7 @@ SinglyOrderedList<T>::SinglyOrderedList(const SinglyOrderedList& other) : head_(
     }
     catch (...) {
         clear();
-        throw;
+        throw std::runtime_error("Unknown exception in copy constructor");
     }
 }
 
@@ -300,7 +329,7 @@ SinglyOrderedList<T>& SinglyOrderedList<T>::operator=(const SinglyOrderedList& o
     }
     catch (...) {
         clear();
-        throw;
+        throw std::runtime_error("Unknown exception in move constructor");
     }
     return *this;
 }
