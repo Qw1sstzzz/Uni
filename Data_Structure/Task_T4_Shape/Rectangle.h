@@ -10,6 +10,8 @@ class Rectangle : public Shape {
 private:
     Point bottomLeft;
     Point topRight;
+
+    void isValid() const;
 public:
     Rectangle(const Point& bl, const Point& tr);
 
