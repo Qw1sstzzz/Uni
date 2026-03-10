@@ -14,7 +14,7 @@ private:
 
     void isValid() const;
 public:
-    Ellipse(const Point& c, double rdx, double rdy);
+    Ellipse(const Point& center, double radiusX, double radiusY);
 
     double getArea() const override;
     Point getCenter() const override;
