@@ -3,9 +3,10 @@
 #include "CompositeShape.h"
 
 void CompositeShape::addShape(std::unique_ptr<Shape> shape) {
-    if (shape != nullptr) {  
-        shapes.push_back(std::move(shape));
+    if (shape == nullptr) {  
+        throw std::invalid_argument("CompositeShape: cannot add null shape");
     }
+    shapes.push_back(std::move(shape));
 }
 
 double CompositeShape::getArea() const {
