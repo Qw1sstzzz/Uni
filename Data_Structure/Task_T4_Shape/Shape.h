@@ -6,7 +6,6 @@
 #include "Point.h"
 
 
-
 struct Shape {
     virtual double getArea() const = 0;
     virtual Point getCenter() const = 0;
