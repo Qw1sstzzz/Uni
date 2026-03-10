@@ -13,7 +13,7 @@ struct Shape {
     virtual void scale(double fact) = 0;
     virtual std::string getName() const = 0;
 
-    virtual ~Shape() {}
+    virtual ~Shape() = default;
 } ;
 
 
