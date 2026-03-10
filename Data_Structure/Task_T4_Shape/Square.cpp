@@ -25,7 +25,6 @@ Point Square::getCenter() const {
 void Square::move(double dx, double dy) {
     bottomLeft.x += dx;
     bottomLeft.y += dy;
-
 }
 
 void Square::scale(double fact) {
