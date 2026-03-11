@@ -9,15 +9,12 @@
 
 void printShapeInfo(const Shape& shape) {
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "[" << shape.getName() << ", " 
-              << shape.getCenter() << ", " 
-              << shape.getArea() << "]";
+    std::cout << "[" << shape.getName() << ", " << shape.getCenter() << ", " << shape.getArea() << "]";
 }
 
 void printCompositeInfo(const CompositeShape& composite) {
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "[COMPOSITE, " << composite.getCenter() << ", " 
-              << composite.getArea() << ":" << std::endl;
+    std::cout << "[COMPOSITE, " << composite.getCenter() << ", " << composite.getArea() << ":" << std::endl;
     const auto& shapes = composite.getShapes();
     for (size_t i = 0; i < shapes.size(); ++i) {
         std::cout << "  ";
@@ -32,14 +29,15 @@ void printCompositeInfo(const CompositeShape& composite) {
 }
 
 void printAllShapes(const std::vector<std::unique_ptr<Shape>>& shapes) {
-    for (const auto& shape : shapes) {
+    for (size_t i = 0; i < shapes.size(); ++i) {
+        const auto& shape = shapes[i];
         if (shape->getName() == "COMPOSITE") {
-            const CompositeShape* composite = 
-                dynamic_cast<const CompositeShape*>(shape.get());
+            const CompositeShape* composite = dynamic_cast<const CompositeShape*>(shape.get());
             if (composite) {
                 printCompositeInfo(*composite);
             }
-        } else {
+        } 
+        else {
             printShapeInfo(*shape);
             std::cout << std::endl;
         }
@@ -50,43 +48,37 @@ int main() {
     try {
         std::vector<std::unique_ptr<Shape>> shapes;
         
-        std::cout << "Создание фигур..." << std::endl;
+        std::cout << "Creating shapes..." << std::endl;
 
         shapes.push_back(std::make_unique<Rectangle>(Point(0, 0), Point(4, 3)));
- 
         shapes.push_back(std::make_unique<Square>(Point(5, 1), 2));
-
         shapes.push_back(std::make_unique<Ellipse>(Point(2, 5), 3, 2));
-
         shapes.push_back(std::make_unique<Rectangle>(Point(-2, -1), Point(1, 2)));
 
         auto composite = std::make_unique<CompositeShape>();
-
         composite->addShape(std::make_unique<Rectangle>(Point(1, 1), Point(3, 4)));
         composite->addShape(std::make_unique<Ellipse>(Point(5, 3), 1.5, 1));
         composite->addShape(std::make_unique<Square>(Point(2, 2), 1.5));
-        
         shapes.push_back(std::move(composite));
         
-        std::cout << "Всего фигур: " << shapes.size() << std::endl;
+        std::cout << "Total shapes: " << shapes.size() << std::endl;
         std::cout << "======================================" << std::endl;
         
-        std::cout << "\nДО МАСШТАБИРОВАНИЯ (factor = 2.0):" << std::endl;
+        std::cout << "\nBEFORE SCALING (factor = 2.0):" << std::endl;
         std::cout << "======================================" << std::endl;
         printAllShapes(shapes);
         
-        std::cout << "\nМасштабирование всех фигур в 2 раза..." << std::endl;
+        std::cout << "\nScaling all shapes by factor 2.0..." << std::endl;
         for (auto& shape : shapes) {
             shape->scale(2.0);
         }
         
-        // 8. Выводим информацию ПОСЛЕ масштабирования
-        std::cout << "\nПОСЛЕ МАСШТАБИРОВАНИЯ:" << std::endl;
+        std::cout << "\nAFTER SCALING:" << std::endl;
         std::cout << "======================================" << std::endl;
         printAllShapes(shapes);
         
     } catch (const std::exception& e) {
-        std::cerr << "Ошибка: " << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
     
