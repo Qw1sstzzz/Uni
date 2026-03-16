@@ -1,4 +1,4 @@
-#include "singly_linked_array.h"
+#include "SinglyLinkedArray.h"
 #include <iostream>
 
 SinglyLinkedArray::SinglyLinkedArray() : head_(nullptr), tail_(nullptr), size_(0) {}
