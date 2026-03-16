@@ -1,4 +1,4 @@
-#include "singly_linked_array.h"
+#include "SinglyLinkedArray.h"
 #include <iostream>
 
 void test1() {
