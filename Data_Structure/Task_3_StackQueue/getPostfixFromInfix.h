@@ -50,7 +50,7 @@ void getPostfixFromInfix(const char* infix, char* postfix) {
             opStack.pop();
         }
         else if (isOperator(c)) {
-            while (!opStack.isEmpty() && isOperator(opStack.top()) >= getPriority(c)) {
+            while (!opStack.isEmpty() && isOperator(opStack.top()) && getPriority(opStack.top()) >= getPriority(c)) {
                 postfix[idxPostfix++] = opStack.pop();
             }
             opStack.push(c);
