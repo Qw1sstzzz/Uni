@@ -52,11 +52,9 @@ T QueueList<T>::deQueue() {
     if (isEmpty()) {
         throw QueueUnderflow("Can't delete from empty queue");
     }
-
     T oldData = head->data;
     Node* temp = head;
     head = head->next;
-
     if (head == nullptr) {
         tail = nullptr;
     }
