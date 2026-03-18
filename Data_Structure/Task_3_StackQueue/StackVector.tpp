@@ -17,7 +17,7 @@ StackVector<T>::StackVector(const StackVector& other) : capacity(other.capacity)
 }
 
 template<typename T>
-StackVector<T>::StackVector(StackVector&& other) : data(other.data), capacity(other.capacity), topIndex(other.topIndex) {
+StackVector<T>::StackVector(StackVector&& other) noexcept : data(other.data), capacity(other.capacity), topIndex(other.topIndex) {
     other.data = nullptr;
     other.capacity = 0;
     other.topIndex = -1;    
@@ -73,7 +73,7 @@ void StackVector<T>::push(const T& e) {
         }
         catch (const std::bad_alloc& ba) {
             delete[] newData;
-            throw std::bad_alloc("ERROR: Can't allocate memory");
+            throw StackOverflow("ERROR: Can't allocate memory");
         }
         catch (...) {
             delete[] newData;

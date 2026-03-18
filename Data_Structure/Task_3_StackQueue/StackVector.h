@@ -11,14 +11,14 @@ private:
     size_t capacity;
     int topIndex;
 public:
-    StackVector() : data(nullptr), capacity(0), topIndex(-1) {}
-    StackVector(size_t size) : data(nullptr), capacity(size), topIndex(-1) {}
+    StackVector();
+    StackVector(size_t size);
     StackVector(const StackVector& other);
-    StackVector(StackVector&& other);
+    StackVector(StackVector&& other) noexcept;
     ~StackVector();
 
     StackVector& operator=(const StackVector& other);
-    StackVector& operator=(StackVector&& other);
+    StackVector& operator=(StackVector&& other) noexcept;
 
     void push(const T& e) override;
     T pop() override;
