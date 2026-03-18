@@ -2,37 +2,7 @@
 #define STACK_H
 
 #include <iostream>
-#include <exception>
-
-class StackOverflow : public std::exception {
-private:
-    const char* message;
-public:
-    StackOverflow(const char* msg) : message(msg) {}
-    const char* what() const noexcept override {
-        return message;
-    }
-} ;
-
-class StackUnderflow : public std::exception {
-private:
-    const char* message;
-public:
-    StackUnderflow(const char* msg) : message(msg) {}
-    const char* what() const noexcept override {
-        return message;
-    }
-} ;
-
-class WrongStackSize : public std::exception {
-private:
-    const char* message;
-public:
-    WrongStackSize(const char* msg) : message(msg) {}
-    const char* what() const noexcept override {
-        return message;
-    }
-} ;
+#include "Errors.h"
 
 template<typename T>
 class Stack {

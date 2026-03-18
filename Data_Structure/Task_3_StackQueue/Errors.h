@@ -54,11 +54,11 @@ public:
     }
 } ;
 
-class WrongQueuekSize : public std::exception {
+class WrongQueueSize : public std::exception {
 private:
     const char* message;
 public:
-    WrongQueuekSize(const char* msg) : message(msg) {}
+    WrongQueueSize(const char* msg) : message(msg) {}
     const char* what() const noexcept override {
         return message;
     }
