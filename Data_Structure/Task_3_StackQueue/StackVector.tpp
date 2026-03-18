@@ -68,9 +68,11 @@ void StackVector<T>::push(const T& e) {
     if (topIndex + 1 >= capacity) {
         size_t newCapacity = (capacity == 0) ? 1 : capacity * 2;
         T* newData = nullptr;
+        
         try {
-            newData =new T[newCapacity];
-            for (size_t i = 0; i <= topIndex; ++i) {
+            newData = new T[newCapacity];  
+            
+            for (int i = 0; i <= topIndex; ++i) {
                 newData[i] = data[i];
             }
         }
@@ -78,12 +80,10 @@ void StackVector<T>::push(const T& e) {
             delete[] newData;
             throw StackOverflow("ERROR: Can't allocate memory");
         }
-        catch (...) {
-            delete[] newData;
-            throw;
-        }
 
-        delete[] data;
+        if (data != nullptr) {
+            delete[] data;
+        }
 
         data = newData;
         capacity = newCapacity;
@@ -91,6 +91,10 @@ void StackVector<T>::push(const T& e) {
     data[++topIndex] = e;
 }
 
+template<typename T>
+size_t StackVector<T>::size() const {
+    return topIndex + 1;
+}
 
 template<typename T>
 T StackVector<T>::pop() {

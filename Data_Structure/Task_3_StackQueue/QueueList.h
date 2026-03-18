@@ -37,8 +37,25 @@ public:
     size_t size() const;
 
     void swap(QueueList& other) noexcept;
+
+    template <typename U>
+    friend std::ostream& operator<<(std::ostream& os, const QueueList<U>& q);
 } ;
 
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const QueueList<T>& q) {
+    os << "[front] ";
+    
+    typename QueueList<T>::Node* current = q.head;
+    while (current != nullptr) {
+        os << current->data;
+        if (current->next != nullptr) os << " ";
+        current = current->next;
+    }
+    
+    os << " [back]";
+    return os;
+}
 
 #include "QueueList.tpp"
 

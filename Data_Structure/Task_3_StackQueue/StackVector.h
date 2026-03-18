@@ -24,11 +24,37 @@ public:
     T pop() override;
     bool isEmpty() const override;
 
+    size_t size() const;
+
     T& top();
     const T& top() const;
 
     void swap(StackVector& other) noexcept;
+
+    template<typename U>
+    friend std::ostream& operator<<(std::ostream& os, const StackVector<U>& st);
 } ;
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const StackVector<T>& st) {
+    os << "[bottom] ";
+    T* temp = new T[st.size()];
+    StackVector<T> copy = st;
+    
+    int i = 0;
+    while (!copy.isEmpty()) {
+        temp[i++] = copy.pop();
+    }
+
+    for (int j = i - 1; j >= 0; --j) {
+        os << temp[j];
+        if (j > 0) os << " ";
+    }
+    
+    delete[] temp;
+    os << " [top]";
+    return os;
+}
 
 #include "StackVector.tpp"
 
