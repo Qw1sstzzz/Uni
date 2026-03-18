@@ -30,4 +30,6 @@ public:
     void swap(StackVector& other) noexcept;
 } ;
 
+#include "StackVector.tpp"
+
 #endif // STACK_VECTOR_H

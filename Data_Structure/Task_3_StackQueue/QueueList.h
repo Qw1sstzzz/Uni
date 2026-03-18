@@ -39,4 +39,7 @@ public:
     void swap(QueueList& other) noexcept;
 } ;
 
+
+#include "QueueList.tpp"
+
 #endif //QUEUE_LIST_H
