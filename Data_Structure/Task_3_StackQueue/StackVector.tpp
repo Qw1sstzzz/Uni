@@ -1,6 +1,9 @@
 #include "StackVector.h"
 
 template<typename T>
+StackVector<T>::StackVector() : data(nullptr), capacity(0), topIndex(-1) {}
+
+template<typename T>
 StackVector<T>::StackVector(size_t size) : data(nullptr), capacity(size), topIndex(-1) {
     if (size <= 0) {
         throw WrongStackSize("ERROR: size must be positive");
