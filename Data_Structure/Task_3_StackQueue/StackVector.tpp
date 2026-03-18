@@ -88,10 +88,27 @@ void StackVector<T>::push(const T& e) {
     data[++topIndex] = e;
 }
 
+
 template<typename T>
 T StackVector<T>::pop() {
     if (isEmpty()) {
         throw StackUnderflow("Can't pop from empty stack(");
     }
     return data[topIndex--];
+}
+
+template<typename T>
+T& StackVector<T>::top() {
+    if (isEmpty()) {
+        throw StackUnderflow("Can't get top from empty stack(");
+    }
+    return data[topIndex];
+}
+
+template<typename T>
+const T& StackVector<T>::top() const {
+    if (isEmpty()) {
+        throw StackUnderflow("Can't get top from empty stack(");
+    }
+    return data[topIndex];
 }
