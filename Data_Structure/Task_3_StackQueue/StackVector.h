@@ -22,7 +22,10 @@ public:
 
     void push(const T& e) override;
     T pop() override;
-    bool isEmpty() override;
+    bool isEmpty() const override;
+
+    T& top();
+    bool T& top() const;
 } ;
 
 #endif // STACK_VECTOR_H
