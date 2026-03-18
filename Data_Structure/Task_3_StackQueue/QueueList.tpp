@@ -97,3 +97,44 @@ const T& QueueList<T>::back() const {
     }
     return tail->data;
 }
+
+
+template <typename T>
+QueueList<T>::QueueList(const QueueList& other) : head(nullptr), tail(nullptr), count(0) {
+    Node* current = other.head;
+    while (current != nullptr) {
+        enQueue(current->data);
+        current = current->next;
+    }
+}
+
+template <typename T>
+QueueList<T>::QueueList(QueueList&& other) noexcept : head(other.head), tail(other.tail), count(other.count) {
+    other.head = nullptr;
+    other.tail = nullptr;
+    other.count = 0;
+}
+
+template <typename T>
+void QueueList<T>::swap(QueueList& other) noexcept {
+    std::swap(head, other.head);
+    std::swap(tail, other.tail);
+    std::swap(count, other.count);
+}
+
+template <typename T>
+QueueList<T>& QueueList<T>::operator=(const QueueList& other) {
+    if (this != &other) {
+        QueueList<T> temp(other);
+        swap(temp);
+    }
+    return *this;
+}
+
+template <typename T>
+QueueList<T>& QueueList<T>::operator=(QueueList&& other) noexcept {
+    if (this != &other) {
+        swap(other);
+    }
+    return *this;
+}
