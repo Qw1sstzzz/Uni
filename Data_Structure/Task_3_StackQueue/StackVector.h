@@ -25,7 +25,7 @@ public:
     bool isEmpty() const override;
 
     T& top();
-    bool T& top() const;
+    const T& top() const;
 
     void swap(StackVector& other) noexcept;
 } ;
