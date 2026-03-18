@@ -64,3 +64,36 @@ T QueueList<T>::deQueue() {
 
     return oldData;
 }
+
+
+template <typename T>
+T& QueueList<T>::front() {
+    if (isEmpty()) {
+        throw QueueUnderflow("Queue is empty");
+    }
+    return head->data;
+}
+
+template <typename T>
+const T& QueueList<T>::front() const {
+    if (isEmpty()) {
+        throw QueueUnderflow("Queue is empty");
+    }
+    return head->data;
+}
+
+template <typename T>
+T& QueueList<T>::back() {
+    if (isEmpty()) {
+        throw QueueUnderflow("Queue is empty");
+    }
+    return tail->data;
+}
+
+template <typename T>
+const T& QueueList<T>::back() const {
+    if (isEmpty()) {
+        throw QueueUnderflow("Queue is empty");
+    }
+    return tail->data;
+}
