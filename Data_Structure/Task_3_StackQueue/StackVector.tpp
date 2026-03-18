@@ -23,7 +23,33 @@ StackVector<T>::StackVector(StackVector&& other) : data(other.data), capacity(ot
     other.topIndex = -1;    
 }
 
-template <typename T>
+template<typename T>
 StackVector<T>::~StackVector() {
     delete[] data;
+}
+
+
+template<typename T>
+void StackVector<T>::swap(StackVector& other) noexcept {
+    std::swap(data, other.data);
+    std::swap(capacity, other.capacity);
+    std::swap(topIndex, other.topIndex);
+}
+
+
+template<typename T>
+StackVector<T>& StackVector<T>::operator=(const StackVector& other) {
+    if (this != &other) {
+        StackVector<T> temp(other);
+        swap(temp);
+    }
+    return *this;
+}
+
+template<typename T>
+StackVector<T>& StackVector<T>::operator=(StackVector&& other) noexcept {
+    if (this != &other) {
+        swap(other);
+    }
+    return *this;
 }

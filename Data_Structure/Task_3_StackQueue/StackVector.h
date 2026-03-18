@@ -26,6 +26,8 @@ public:
 
     T& top();
     bool T& top() const;
+
+    void swap(StackVector& other) noexcept;
 } ;
 
 #endif // STACK_VECTOR_H
