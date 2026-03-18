@@ -73,7 +73,7 @@ void StackVector<T>::push(const T& e) {
         }
         catch (const std::bad_alloc& ba) {
             delete[] newData;
-            throw StackOverflow("ERROR: Can't allocate memory");
+            throw std::bad_alloc("ERROR: Can't allocate memory");
         }
         catch (...) {
             delete[] newData;
