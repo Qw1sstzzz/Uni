@@ -53,3 +53,25 @@ StackVector<T>& StackVector<T>::operator=(StackVector&& other) noexcept {
     }
     return *this;
 }
+
+
+template<typename T>
+bool StackVector<T>::isEmpty() const {
+    return topIndex == -1;
+}
+
+template<typename T>
+void StackVector<T>::push(const T& e) {
+    if (topIndex + 1 >= capacity) {
+        size_t newCapacity = (capacity == 0) ? 1 : capacity * 2;
+        T* newData = new T[newCapacity];
+        for (size_t i = 0; i <= topIndex; ++i) {
+            newData[i] = data[i];
+        }
+        delete[] data;
+
+        data = newData;
+        capacity = newCapacity;
+    }
+    data[++topIndex] = e;
+}
