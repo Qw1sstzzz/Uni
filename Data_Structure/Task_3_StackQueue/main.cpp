@@ -16,6 +16,12 @@ void testStack() {
     std::cout << "Добавляем 30...\n";
     st.push(30);
     
+    StackVector<int> st2;
+    st2.push(1);
+    st2.pop();
+    st2.pop();
+    std::cout << "Стек: " << st2 << std::endl;
+
     std::cout << "Стек: " << st << std::endl;
     std::cout << "Top: " << st.top() << std::endl;
     std::cout << "Pop: " << st.pop() << std::endl;
@@ -46,12 +52,12 @@ void testPostfix() {
     char postfix[100];
     
     const char* expr1 = "a+b*c";
-    std::cout << "Обрабатываем " << expr1 << "...\n";
+    std::cout << "-> " << expr1 << "...\n";
     getPostfixFromInfix(expr1, postfix);
     std::cout << expr1 << " -> " << postfix << std::endl;
     
     const char* expr2 = "(a+b)*c";
-    std::cout << "Обрабатываем " << expr2 << "...\n";
+    std::cout << "-> " << expr2 << "...\n";
     getPostfixFromInfix(expr2, postfix);
     std::cout << expr2 << " -> " << postfix << std::endl;
 }
@@ -62,9 +68,9 @@ int main() {
         testQueue();
         testPostfix();
     } catch (const std::exception& e) {
-        std::cout << "\n!!! ПЕРЕХВАЧЕНО ИСКЛЮЧЕНИЕ: " << e.what() << std::endl;
+        std::cout << "\nERROR: " << e.what() << std::endl;
     } catch (...) {
-        std::cout << "\n!!! НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ" << std::endl;
+        std::cout << "\nnERROR: " << std::endl;
     }
     
     std::cout << "\nПрограмма завершена" << std::endl;
