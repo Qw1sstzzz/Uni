@@ -137,3 +137,20 @@ void BinarySearchTree<T>::inorderWalk() const {
 }
 
 
+template <typename T>
+void BinarySearchTree<T>::output(std::ostream& out, Node* node) const {
+    if (node == nullptr) {
+        out << "()";
+        return;
+    }
+    out << "(" << node->key_;
+    output(out, node->left_);
+    output(out, node->right_);
+    out << ")";
+}
+
+template <typename T>
+void BinarySearchTree<T>::output(std::ostream& out) const {
+    output(out, root_);
+}
+
