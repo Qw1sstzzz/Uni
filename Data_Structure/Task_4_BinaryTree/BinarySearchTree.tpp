@@ -119,3 +119,18 @@ template <typename T>
 int BinarySearchTree<T>::getHeight() const {
     return getHeight(root_);
 }
+
+template <typename T>
+void BinarySearchTree<T>::inorderWalk(Node* node) const {
+    if (node != nullptr) {
+        inorderWalk(node->left_);
+        std::cout << node->key_ << " ";
+        inorderWalk(node->right_);
+    }
+}
+
+template <typename T>
+void BinarySearchTree<T>::inorderWalk(Node* node) const {
+    inorderWalk(root_);
+    std::cout << std::endl;
+}
