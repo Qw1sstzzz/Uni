@@ -43,8 +43,6 @@ int main() {
     tree2.insert(100);
     tree2.insert(200);
     std::cout << "Check tree1 and tree2 (no common): " << (tree1.hasCommonKeys(tree2) ? "YES" : "NO") << std::endl;
-    
-    std::cout << "Inserting 60 into tree2..." << std::endl;
     tree2.insert(60);
     std::cout << "Check tree1 and tree2 (has common): " << (tree1.hasCommonKeys(tree2) ? "YES" : "NO") << std::endl;
     std::cout << "\n";
