@@ -4,26 +4,25 @@
 template <typename T>
 class BinarySearchTree {
 private:
-template <typename U>
     struct Node {
-        U key_;
-        Node<U>* left_;
-        Node<U>* right_;
-        Node<U>* p_;
+        T key_;
+        Node* left_;
+        Node* right_;
+        Node* p_;
 
-        Node(U key, Node* left = nullptr, Node* right = nullptr, Node* p = nullptr)
+        Node(T key, Node* left = nullptr, Node* right = nullptr, Node* p = nullptr)
             : key_(key), left_(left), right_(right), p_(p) {}
     } ;
 
-    Node<T>* root_;
+    Node* root_;
 
-    void clear(Node<T>* node);
+    void clear(Node* node);
 
-    Node<T>* searchIterative(const T& key) const;
-    void output(std::ostream& out, Node<T>* root) const;
-    int getNumberOfNodes(const Node<T>* node) const;
-    int getHeight(const Node<T>* node) const;
-    void inorderWalk(Node<T>* node) const;
+    Node* findNode(const T& key) const;
+    void output(std::ostream& out, Node* root) const;
+    int getNumberOfNodes(const Node* node) const;
+    int getHeight(const Node* node) const;
+    void inorderWalk(Node* node) const;
 public:
     BinarySearchTree();
     BinarySearchTree(const BinarySearchTree<T>& scr) = delete;
