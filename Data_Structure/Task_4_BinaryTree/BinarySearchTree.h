@@ -1,6 +1,8 @@
 #ifndef BINARY_SEARCH_TREE_H
 #define BINARY_SEARCH_TREE_H
 
+#include <iostream>
+
 template <typename T>
 class BinarySearchTree {
 private:

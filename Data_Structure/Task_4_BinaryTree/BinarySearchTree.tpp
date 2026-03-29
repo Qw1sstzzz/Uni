@@ -1,4 +1,6 @@
 #include "BinarySearchTree.h"
+
+#include <iostream>
 #include <stack>
 #include <queue>
 
@@ -144,7 +146,7 @@ void BinarySearchTree<T>::inorderWalkIterative() const {
     std::stack<Node*> stack;
     Node* current = root_;
 
-    while ((current != nullptr) || (!stack.isempty())) {
+    while ((current != nullptr) || (!stack.empty())) {
         while (current != nullptr) {
             stack.push(current);
             current = current->left_;
