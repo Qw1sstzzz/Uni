@@ -30,10 +30,10 @@ private:
     void transplant(Node* u, Node* v);
 public:
     BinarySearchTree();
-    BinarySearchTree(const BinarySearchTree<T>& scr) = delete;
-    BinarySearchTree<T>& operator=(const BinarySearchTree<T>& scr) = delete;
-    BinarySearchTree(BinarySearchTree<T>&& scr) noexcept;
-    BinarySearchTree<T>& operator=(BinarySearchTree<T>&& scr) noexcept;
+    BinarySearchTree(const BinarySearchTree<T>& src) = delete;
+    BinarySearchTree<T>& operator=(const BinarySearchTree<T>& src) = delete;
+    BinarySearchTree(BinarySearchTree<T>&& src) noexcept;
+    BinarySearchTree<T>& operator=(BinarySearchTree<T>&& src) noexcept;
     ~BinarySearchTree();
 
     bool searchIterative(const T& key) const;

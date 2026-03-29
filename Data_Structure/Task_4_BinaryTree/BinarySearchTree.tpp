@@ -216,7 +216,7 @@ void BinarySearchTree<T>::transplant(Node* u, Node* v) {
     if (u->p_ == nullptr) {
         root_ = v;
     }
-    else if (u == u->p_->left) {
+    else if (u == u->p_->left_) {
         u->p_->left_ = v;
     }
     else {
@@ -226,4 +226,34 @@ void BinarySearchTree<T>::transplant(Node* u, Node* v) {
     if (v != nullptr) {
         v->p_ = u->p_;
     }
+}
+
+template <typename T>
+bool BinarySearchTree<T>::remove(const T& key) {
+    Node* t = findNode(key);
+    if (t == nullptr) {
+        return false;
+    }
+
+    if (t->left_ == nullptr) {
+        transplant(t, t->right_);
+    }
+    else if (t->right_ == nullptr) {
+        transplant(t, t->left_);
+    }
+    else {
+        Node* successor = minimum(t->right_);
+
+        if (successor->p_ != t) {
+            transplant(successor, successor->right_);
+            successor->right_ = t->right_;
+            successor->right_->p_ = successor;
+        }
+
+        transplant(t, successor);
+        successor->left_ = t->left_;
+        successor->left_->p_ = successor;
+    }
+    delete t;
+    return true;
 }
