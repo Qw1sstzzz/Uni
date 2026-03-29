@@ -4,18 +4,20 @@
 template <typename T>
 class BinarySearchTree {
 private:
+template <typename U>
     struct Node {
-        T key_;
-        Node* left_;
-        Node* right_;
-        Node* p_;
+        U key_;
+        Node<U>* left_;
+        Node<U>* right_;
+        Node<U>* p_;
 
-        Node(T key, Node* left = nullptr, Node* right = nullptr, Node* p = nullptr)
+        Node(U key, Node* left = nullptr, Node* right = nullptr, Node* p = nullptr)
             : key_(key), left_(left), right_(right), p_(p) {}
     } ;
-    Node* root_;
 
-    void clear(Node* node);
+    Node<T>* root_;
+
+    void clear(Node<T>* node);
 
     Node<T>* searchIterative(const T& key) const;
     void output(std::ostream& out, Node<T>* root) const;
