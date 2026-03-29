@@ -1,4 +1,5 @@
 #include "BinarySearchTree.h"
+#include <algorithm>
 
 template<typename T>
 void BinarySearchTree<T>::clear(Node* node) {
@@ -104,4 +105,17 @@ int BinarySearchTree<T>::getNumberOfNodes(const Node* node) const {
 template <typename T>
 int BinarySearchTree<T>::getNumberOfNodes() const {
     return 1 + getNumberOfNodes(root_);
+}
+
+template <typename T>
+int BinarySearchTree<T>::getHeight(const Node* node) const {
+    if (node == nullptr) {
+        return -1;
+    }
+    return 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+}
+
+template <typename T>
+int BinarySearchTree<T>::getHeight() const {
+    return getHeight(root_);
 }
