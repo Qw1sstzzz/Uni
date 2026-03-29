@@ -1,4 +1,6 @@
 #include "BinarySearchTree.h"
+#include <stack>
+#include <queue>
 
 template<typename T>
 void BinarySearchTree<T>::clear(Node* node) {
@@ -138,6 +140,49 @@ void BinarySearchTree<T>::inorderWalk() const {
 
 
 template <typename T>
+void BinarySearchTree<T>::inorderWalkIterative() const {
+    std::stack<Node*> stack;
+    Node* current = root_;
+
+    while ((current != nullptr) || (!stack.isempty())) {
+        while (current != nullptr) {
+            stack.push(current);
+            current = current->left_;
+        }
+        current = stack.top();
+        stack.pop();
+        std::cout << current->key_ << " ";
+        current = current->right_;
+    }
+    std::cout << std::endl;
+} 
+
+
+template <typename T>
+void BinarySearchTree<T>::walkByLevels() const {
+    if (root_ == nullptr) {
+        return;
+    }
+
+    std::queue<Node*> q;
+    q.push(root_);
+
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+        std::cout << current->key_ << " ";
+
+        if (current->left_) {
+            q.push(current->left_);
+        }
+        if (current->right_) {
+            q.push(current->right_);
+        }
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
 void BinarySearchTree<T>::output(std::ostream& out, Node* node) const {
     if (node == nullptr) {
         out << "()";
@@ -153,4 +198,6 @@ template <typename T>
 void BinarySearchTree<T>::output(std::ostream& out) const {
     output(out, root_);
 }
+
+
 
