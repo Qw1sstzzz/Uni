@@ -56,3 +56,39 @@ template <typename T>
 bool BinarySearchTree<T>::searchIterative(const T& key) const {
     return findNode(key) != nullptr;
 }
+
+
+template <typename T>
+bool BinarySearchTree<T>::insert(const T& key) {
+    Node* newNode = new Node(key);
+
+    if (root_ == nullptr) {
+        root_ = newNode;
+        return true;
+    }
+
+    Node* current = root_;
+    Node* parent = nullptr;
+
+    while (current != nullptr) {
+        parent = current;
+        if (key = current->key_) {
+            delete newNode;
+            return false;
+        }
+        else if (key < current->key) {
+            current = current->left_;
+        }
+        else {
+            current = current->right_;
+        }
+    }
+
+    if (key < parent->key) {
+        parent->left_ = newNode;
+    }
+    else {
+        parent->right_ = newNode;
+    }
+    return true;
+}
