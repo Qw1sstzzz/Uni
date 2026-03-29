@@ -45,6 +45,8 @@ public:
     void inorderWalkIterative () const;
     void inorderWalk() const;
     void walkByLevels() const;
+
+    bool hasCommonKeys(const BinarySearchTree<T>& src) const;
 } ;
 
 #include "BinarySearchTree.tpp"

@@ -257,3 +257,32 @@ bool BinarySearchTree<T>::remove(const T& key) {
     delete t;
     return true;
 }
+
+
+template <typename T>
+bool BinarySearchTree<T>::hasCommonKeys(const BinarySearchTree<T>& src) const {
+    if ((root_ == nullptr) || (src.root_ == nullptr)) {
+        return false;
+    }
+
+    std::queue<Node*> q;
+    q.push(root_);
+
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+
+        if (src.searchIterative(current->key_)) {
+            return true;
+        }
+
+        if (current->left_) {
+            q.push(current->left_);
+        }
+        if (current->right_) {
+            q.push(current->right_);
+        }
+    }
+
+    return false;
+}
