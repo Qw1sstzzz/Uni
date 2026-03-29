@@ -88,6 +88,7 @@ bool BinarySearchTree<T>::insert(const T& key) {
         }
     }
 
+    newNode->p_ = parent;
     if (key < parent->key_) {
         parent->left_ = newNode;
     }
@@ -202,4 +203,27 @@ void BinarySearchTree<T>::output(std::ostream& out) const {
 }
 
 
+template <typename T>
+typename BinarySearchTree<T>::Node* BinarySearchTree<T>::minimum(Node* node) const {
+    while (node->left_ != nullptr) {
+        node = node->left_;
+    }
+    return node;
+}
 
+template <typename T>
+void BinarySearchTree<T>::transplant(Node* u, Node* v) {
+    if (u->p_ == nullptr) {
+        root_ = v;
+    }
+    else if (u == u->p_->left) {
+        u->p_->left_ = v;
+    }
+    else {
+        u->p_->right_ = v;
+    }
+
+    if (v != nullptr) {
+        v->p_ = u->p_;
+    }
+}

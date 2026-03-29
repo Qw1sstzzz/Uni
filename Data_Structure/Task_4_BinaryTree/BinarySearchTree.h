@@ -25,6 +25,9 @@ private:
     int getNumberOfNodes(const Node* node) const;
     int getHeight(const Node* node) const;
     void inorderWalk(Node* node) const;
+
+    Node* minimum(Node* node) const;
+    void transplant(Node* u, Node* v);
 public:
     BinarySearchTree();
     BinarySearchTree(const BinarySearchTree<T>& scr) = delete;
