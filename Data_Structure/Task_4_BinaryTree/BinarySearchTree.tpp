@@ -54,5 +54,5 @@ typename BinarySearchTree<T>::Node* BinarySearchTree<T>::findNode(const T& key) 
 
 template <typename T>
 bool BinarySearchTree<T>::searchIterative(const T& key) const {
-    return searchIterative(key) != nullptr;
+    return findNode(key) != nullptr;
 }
