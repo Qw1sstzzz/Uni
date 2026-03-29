@@ -14,6 +14,8 @@ private:
             : key_(key), left_(left), right_(right), p_(p) {}
     } ;
     Node* root_;
+
+    void clear(Node* node);
 public:
     BinarySearchTree();
     BinarySearchTree(const BinarySearchTree<T>& source) = delete;
@@ -23,6 +25,6 @@ public:
     ~BinarySearchTree();
 } ;
 
-#include "BinaryTreeSearch.tpp"
+#include "BinarySearchTree.tpp"
 
 #endif //BINARY_SEARCH_TREE_H
