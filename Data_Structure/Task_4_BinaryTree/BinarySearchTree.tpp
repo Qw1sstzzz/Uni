@@ -1,5 +1,4 @@
 #include "BinarySearchTree.h"
-#include <algorithm>
 
 template<typename T>
 void BinarySearchTree<T>::clear(Node* node) {
@@ -73,11 +72,11 @@ bool BinarySearchTree<T>::insert(const T& key) {
 
     while (current != nullptr) {
         parent = current;
-        if (key = current->key_) {
+        if (key == current->key_) {
             delete newNode;
             return false;
         }
-        else if (key < current->key) {
+        else if (key < current->key_) {
             current = current->left_;
         }
         else {
@@ -85,7 +84,7 @@ bool BinarySearchTree<T>::insert(const T& key) {
         }
     }
 
-    if (key < parent->key) {
+    if (key < parent->key_) {
         parent->left_ = newNode;
     }
     else {
@@ -104,7 +103,7 @@ int BinarySearchTree<T>::getNumberOfNodes(const Node* node) const {
 
 template <typename T>
 int BinarySearchTree<T>::getNumberOfNodes() const {
-    return 1 + getNumberOfNodes(root_);
+    return getNumberOfNodes(root_);
 }
 
 template <typename T>
@@ -112,7 +111,9 @@ int BinarySearchTree<T>::getHeight(const Node* node) const {
     if (node == nullptr) {
         return -1;
     }
-    return 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+    int leftHeight = getHeight(node->left_);
+    int rightHeight = getHeight(node->right_);
+    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
 }
 
 template <typename T>
@@ -130,7 +131,9 @@ void BinarySearchTree<T>::inorderWalk(Node* node) const {
 }
 
 template <typename T>
-void BinarySearchTree<T>::inorderWalk(Node* node) const {
+void BinarySearchTree<T>::inorderWalk() const {
     inorderWalk(root_);
     std::cout << std::endl;
 }
+
+
