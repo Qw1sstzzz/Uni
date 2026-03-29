@@ -92,3 +92,16 @@ bool BinarySearchTree<T>::insert(const T& key) {
     }
     return true;
 }
+
+template <typename T>
+int BinarySearchTree<T>::getNumberOfNodes(const Node* node) const {
+    if (node == nullptr) {
+        return 0;
+    }
+    return 1 + getNumberOfNodes(node->left_) + getNumberOfNodes(node->right_);
+}
+
+template <typename T>
+int BinarySearchTree<T>::getNumberOfNodes() const {
+    return 1 + getNumberOfNodes(root_);
+}
