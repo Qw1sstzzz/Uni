@@ -16,13 +16,29 @@ private:
     Node* root_;
 
     void clear(Node* node);
+
+    Node<T>* searchIterative(const T& key) const;
+    void output(std::ostream& out, Node<T>* root) const;
+    int getNumberOfNodes(const Node<T>* node) const;
+    int getHeight(const Node<T>* node) const;
+    void inorderWalk(Node<T>* node) const;
 public:
     BinarySearchTree();
-    BinarySearchTree(const BinarySearchTree<T>& source) = delete;
-    BinarySearchTree<T>& operator=(const BinarySearchTree<T>& source) = delete;
-    BinarySearchTree(BinarySearchTree<T>&& source) noexcept;
-    BinarySearchTree<T>& operator=(BinarySearchTree<T>&& source) noexcept;
+    BinarySearchTree(const BinarySearchTree<T>& scr) = delete;
+    BinarySearchTree<T>& operator=(const BinarySearchTree<T>& scr) = delete;
+    BinarySearchTree(BinarySearchTree<T>&& scr) noexcept;
+    BinarySearchTree<T>& operator=(BinarySearchTree<T>&& scr) noexcept;
     ~BinarySearchTree();
+
+    bool searchIterative(const T& key) const;
+    bool insert(const T& key);
+    bool remove(const T& key);
+    void output(std::ostream& out) const;
+    int getNumberOfNodes() const;
+    int getHeight() const;
+    void inorderWalkIterative () const;
+    void inorderWalk() const;
+    void walkByLevels() const;
 } ;
 
 #include "BinarySearchTree.tpp"
