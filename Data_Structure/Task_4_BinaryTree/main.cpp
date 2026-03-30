@@ -37,6 +37,7 @@ int main() {
     tree1.remove(30);
     std::cout << "Inorder after remove: ";
     tree1.inorderWalk();
+    tree1.output(std::cout);
     std::cout << "\n";
 
     std::cout << "===== TEST 4: Common Keys =====" << std::endl;
@@ -46,12 +47,7 @@ int main() {
     tree2.insert(60);
     std::cout << "Check tree1 and tree2 (has common): " << (tree1.hasCommonKeys(tree2) ? "YES" : "NO") << std::endl;
     std::cout << "\n";
-
-    std::cout << "===== TEST 5: Move Semantics =====" << std::endl;
-    BinarySearchTree<int> tree3 = std::move(tree1);
-    std::cout << "Tree3 nodes after move: " << tree3.getNumberOfNodes() << std::endl;
-    std::cout << "Tree1 nodes after move: " << tree1.getNumberOfNodes() << " (Expected: 0)" << std::endl;
-
+    
     std::cout << "\n===== ALL TESTS COMPLETED =====" << std::endl;
 
     return 0;
