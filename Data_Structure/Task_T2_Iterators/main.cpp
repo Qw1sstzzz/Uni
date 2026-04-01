@@ -240,6 +240,24 @@ public:
 } ;
 
 
+std::ostream& opertor<<(std::ostream& out, const DataStruct& source) {
+    std::ostream::sentry sentry(out);
+    if (!sentry) {
+        return out;
+    }
+
+    iofmtguard guard(out);
+
+    out << "(:key1 ";
+    out << std::scientific << std::setprecision(1) << source.key1;
+
+    out << ":key2 " << source.key2 << "ll";
+    out << ":key3 \"" << source.key3 << "\":)";
+
+    return out;
+}
+
+
 int main(void) {
     std::cout << "Program started" << std::endl;
     
