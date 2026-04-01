@@ -64,7 +64,55 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
         return in;
     }
 
-    return in >> dest.ref;
+    std::streampos pos = in.tellg();
+
+    std::string num;
+    in >> num;
+
+    if (!in) {
+        return in;
+    }
+
+    bool valid = false;
+
+    size_t dotPos = num.find('.');
+    if (dotPos != std::string::npos) {
+        bool hasDigitBefore = dotPos > 0 && std::isdigit(num[dotPos - 1]);
+        bool hasDigitAfter = dotPos + 1 < num.length() && std::isdigit(num[dotPos + 1]);
+        
+        if (hasDigitBefore && hasDigitAfter) {
+            size_t expPos = num.find_first_of("eE");
+            if (expPos != std::string::npos && expPos > dotPos) {
+                char sign = num[expPos + 1];
+                size_t startExp = expPos + 1;
+                if (sign == '+' || sign == '-') {
+                    startExp++;
+                }
+
+                if (startExp < num.length() && std::isdigit(num[startExp])) {
+                    valid = true;
+                }
+            }
+        }
+    
+    }
+
+    if (valid) {
+        try {
+            dest.ref = std::stod(num);
+        }
+        catch (...) {
+            valid = false;
+        }
+    }
+
+    if (!valid) {
+        in.clear();
+        in.seekg(pos);
+        in.setstate(std::ios::failbit);
+    }
+
+    return in;
 }
 
 
