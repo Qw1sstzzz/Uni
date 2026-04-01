@@ -147,6 +147,75 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
     return in;
 }
 
+
+std::istream& operator>>(std::istream& in, DataStruct& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    DataStruct temp;
+    bool key1_read = false;
+    bool key2_read = false;
+    bool key3_read = false;
+
+    in >> DelimiterIO{'('};
+    if (!in) {
+        return in;
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        in >> DelimiterIO{':'};
+        if (!in) {
+            return in;
+        }
+
+        std::string label;
+        in >> label;
+        if (!in) {
+            return in;
+        }
+
+        in >> DelimiterIO{' '};
+        if (!in) {
+            return in;
+        }
+
+        if (label == "key1" && !key1_read) {
+            in >> DoubleSciIO{temp.key1};
+            key1_read = true;
+        }
+        else if (label == "key2" && !key2_read) {
+            in >> LongLongIO{temp.key2};
+            key2_read = true;
+        } 
+        else if (label == "key3" && !key3_read) {
+            in >> StringIO{temp.key3};
+            key3_read = true;
+        } 
+        else {
+            in.setstate(std::ios::failbit);
+            return in;
+        }
+
+        if (!in) {
+            return in;
+        }
+    }
+
+    in >> DelimiterIO{':'} >> DelimiterIO{')'};
+
+    if (in && key1_read && key2_read && key3_read) {
+        dest = std::move(temp);
+    }
+    else {
+        in.setstate(std::ios::failbit);
+    }
+
+    return in;
+}
+
+
 int main(void) {
     std::cout << "Program started" << std::endl;
     
