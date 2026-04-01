@@ -53,11 +53,22 @@ std::istream& operator>>(std::istream& in, StringIO&& dest) {
     return in;
 }
 
+struct DoubleSciIO {
+    double& ref;
+} ;
+
+std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    return in >> dest.ref;
+}
 
 int main(void) {
     std::cout << "Program started" << std::endl;
     
-    // Тестируем чтение строки в кавычках
     std::string testString;
     std::cout << "Enter a string in quotes (like \"hello world\"): ";
     std::cin >> StringIO{testString};
