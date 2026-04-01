@@ -258,6 +258,17 @@ std::ostream& opertor<<(std::ostream& out, const DataStruct& source) {
 }
 
 
+bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
+    if (std::abs(a.key1 - b.key1) > 1e-9) {
+        return a.key1 < b.key1;
+    }
+    if (a.key2 != b.key2) {
+        return a.key2 < b.key2;
+    }
+    return a.key3.length() < b.key3.length();
+}
+
+
 int main(void) {
     std::cout << "Program started" << std::endl;
     
