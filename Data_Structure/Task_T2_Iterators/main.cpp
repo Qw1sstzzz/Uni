@@ -53,6 +53,7 @@ std::istream& operator>>(std::istream& in, StringIO&& dest) {
     return in;
 }
 
+
 struct DoubleSciIO {
     double& ref;
 } ;
@@ -64,6 +65,38 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
     }
 
     return in >> dest.ref;
+}
+
+
+struct LongLongIO {
+    long long& ref;
+} ;
+
+std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    std::streampos pos = in.tellg();
+
+    in >> dest.ref;
+    if (!in) {
+        return in;
+    }
+
+    char first = in.get();
+    char second = in.get();
+
+    bool isValid = (first == 'l' || first == 'L') && (second == 'l' || second == 'L');
+
+    if (!isValid) {
+        in.clear();
+        in.seekg(pos);
+        in.setstate(std::ios::failbit);
+    }
+
+    return in;
 }
 
 int main(void) {
