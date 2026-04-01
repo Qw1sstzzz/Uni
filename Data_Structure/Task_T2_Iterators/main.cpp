@@ -32,7 +32,37 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
     return in;
 }
 
+
+struct StringIO {
+    std::string& ref;
+} ;
+
+std::istream& operator>>(std::istream& in, StringIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    in >> DelimiterIO{'"'};
+    if (!in) {
+        return in;
+    }
+
+    std::getline(in, dest.ref, '"');
+
+    return in;
+}
+
+
 int main(void) {
-    std::cout << "Programm started" << std::endl;
+    std::cout << "Program started" << std::endl;
+    
+    // Тестируем чтение строки в кавычках
+    std::string testString;
+    std::cout << "Enter a string in quotes (like \"hello world\"): ";
+    std::cin >> StringIO{testString};
+    
+    std::cout << "You entered: \"" << testString << "\"" << std::endl;
+    
     return 0;
 }
