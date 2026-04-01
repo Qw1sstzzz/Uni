@@ -240,7 +240,7 @@ public:
 } ;
 
 
-std::ostream& opertor<<(std::ostream& out, const DataStruct& source) {
+std::ostream& operator<<(std::ostream& out, const DataStruct& source) {
     std::ostream::sentry sentry(out);
     if (!sentry) {
         return out;
@@ -270,13 +270,26 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 
 
 int main(void) {
-    std::cout << "Program started" << std::endl;
-    
-    std::string testString;
-    std::cout << "Enter a string in quotes (like \"hello world\"): ";
-    std::cin >> StringIO{testString};
-    
-    std::cout << "You entered: \"" << testString << "\"" << std::endl;
-    
+    std::vector<DataStruct> data;
+
+    std::copy(
+        std::istream_iterator<DataStruct>(std::cin),
+        std::istream_iterator<DataStruct>(),
+        std::back_inserter(data)
+    );
+
+    if (std::cin.fail() && !std::cin.eof()) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+    std::sort(data.begin(), data.end(), compareDataStruct);
+
+    std::copy(
+        data.begin(),
+        data.end(),
+        std::ostream_iterator<DataStruct>(std::cout, "\n")
+    );
+
     return 0;
 }
