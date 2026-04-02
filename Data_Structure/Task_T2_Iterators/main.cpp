@@ -33,6 +33,10 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
 }
 
 
+struct KeyIO {
+    std::string& ref;
+} ;
+
 std::istream& operator>>(std::istream& in, KeyIO&& dest) {
     std::istream::sentry sentry(in);
     if (!sentry) {
@@ -42,7 +46,7 @@ std::istream& operator>>(std::istream& in, KeyIO&& dest) {
     dest.ref.clear();
     char c;
 
-    while (in >> c && std::isalnum(static_cast<usigned char>(c))) {
+    while (in >> c && std::isalnum(static_cast<unsigned char>(c))) {
         dest.ref += c;
     }
     if (dest.ref.empty()) {
