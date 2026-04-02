@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <limits>
 
+
 struct DataStruct {
     double key1;
     long long key2;
@@ -21,14 +22,11 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
     if (!sentry) {
         return in;
     }
-
     char c;
     in >> c;
-
     if (in && c != dest.expected) {
         in.setstate(std::ios::failbit);
     }
-
     return in;
 }
 
@@ -42,28 +40,11 @@ std::istream& operator>>(std::istream& in, KeyIO&& dest) {
     if (!sentry) {
         return in;
     }
-
     dest.ref.clear();
     char c;
-
-    // НЕ пропускаем пробелы - читаем следующий символ как есть
     if (in.get(c) && std::isalnum(static_cast<unsigned char>(c))) {
         dest.ref += c;
-        while (in.get(c) && std::isalnum(static_cast<unsigned char>(c))) {
-            dest.ref += c;
-        }
-        // Возвращаем последний прочитанный символ обратно, если он не буква/цифра
-        if (!std::isalnum(static_cast<unsigned char>(c))) {
-            in.putback(c);
-        }
     }
-
-    std::cerr << "KeyIO read: [" << dest.ref << "]" << std::endl;
-
-    if (dest.ref.empty()) {
-        in.setstate(std::ios::failbit);
-    }
-
     return in;
 }
 
@@ -77,15 +58,12 @@ std::istream& operator>>(std::istream& in, StringIO&& dest) {
     if (!sentry) {
         return in;
     }
-
     char c;
     if (!(in >> c) || c != '"') {
         in.setstate(std::ios::failbit);
         return in;
     }
-
     std::getline(in, dest.ref, '"');
-
     return in;
 }
 
@@ -99,7 +77,6 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
     if (!sentry) {
         return in;
     }
-
     in >> std::ws;
     std::string num;
     char c;
@@ -133,20 +110,22 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
         }
     }
 
-    if (valid) {
-        try {
-            dest.ref = std::stod(num);
-        }
-        catch (...) {
-            valid = false;
-        }
-    }
-
     if (!valid) {
         in.setstate(std::ios::failbit);
+        return in;
     }
+
+
+    try {
+        dest.ref = std::stod(num);
+    }
+    catch (...) {
+        in.setstate(std::ios::failbit);
+    }
+
     return in;
 }
+
 
 struct LongLongIO {
     long long& ref;
@@ -167,9 +146,6 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
     }
     in.putback(':');
 
-    char first = in.get();
-    char second = in.get();
-
     bool lastIsL = (temp.back() == 'l' || temp.back() == 'L');
     bool preLastIsL = (temp[temp.size() - 2] == 'l' || temp[temp.size() - 2] == 'L');
     if (temp.size() >= 2 && lastIsL && preLastIsL) {
@@ -177,6 +153,7 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         temp.pop_back();
         try {
             dest.ref = std::stoll(temp);
+            return in;
         }
         catch (...) {
             in.setstate(std::ios::failbit);
@@ -193,67 +170,43 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
 std::istream& operator>>(std::istream& in, DataStruct& dest) {
     std::istream::sentry sentry(in);
     if (!sentry) {
-        std::cerr << "sentry failed" << std::endl;
         return in;
     }
 
     DataStruct temp;
 
-    std::cerr << "Trying to read '(' and ':'" << std::endl;
     if (!(in >> DelimiterIO{'('} >> DelimiterIO{':'})) {
-        std::cerr << "Failed to read '(' or ':'" << std::endl;
         return in;
     }
-    std::cerr << "Successfully read '(' and ':'" << std::endl;
 
     for (int i = 0; i < 3; ++i) {
-        std::cerr << "Reading field " << i << std::endl;
-
         std::string key;
         in >> KeyIO{key};
-        std::cerr << "Read key: [" << key << "]" << std::endl;
 
         if (key == "key1") {
-            std::cerr << "Reading key1 as DoubleSciIO" << std::endl;
             in >> DoubleSciIO{temp.key1};
         }
         else if (key == "key2") {
-            std::cerr << "Reading key2 as LongLongIO" << std::endl;
             in >> LongLongIO{temp.key2};
         }
         else if (key == "key3") {
-            std::cerr << "Reading key3 as StringIO" << std::endl;
             in >> StringIO{temp.key3};
         }
         else {
-            std::cerr << "Unknown key: " << key << std::endl;
             in.setstate(std::ios::failbit);
             break;
         }
 
-        if (!in) {
-            std::cerr << "Failed to read value for key: " << key << std::endl;
-            break;
-        }
-        std::cerr << "Successfully read value for key: " << key << std::endl;
-
         if (i < 2) {
-            std::cerr << "Reading ':' separator" << std::endl;
             in >> DelimiterIO{':'};
             if (!in) {
-                std::cerr << "Failed to read ':' separator" << std::endl;
                 break;
             }
         }
     }
 
-    std::cerr << "Trying to read ')'" << std::endl;
     if (in >> DelimiterIO{')'}) {
-        std::cerr << "Successfully read ')'" << std::endl;
         dest = temp;
-        std::cerr << "DataStruct parsed successfully!" << std::endl;
-    } else {
-        std::cerr << "Failed to read ')'" << std::endl;
     }
 
     return in;
@@ -289,7 +242,6 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& source) {
 
     out << "(:key1 ";
     out << std::scientific << std::setprecision(1) << source.key1;
-
     out << ":key2 " << source.key2 << "ll";
     out << ":key3 \"" << source.key3 << "\":)";
 
@@ -312,13 +264,8 @@ int main(void) {
     std::vector<DataStruct> data;
     std::string line;
 
-    std::cerr << "Program started. Enter data:" << std::endl;
-
     while (std::getline(std::cin, line)) {
-        std::cerr << "Read line: [" << line << "]" << std::endl;
-
         if (line.empty()) {
-            std::cerr << "Line is empty, skipping" << std::endl;
             continue;
         }
 
@@ -326,14 +273,9 @@ int main(void) {
         DataStruct temp;
 
         if (iss >> temp) {
-            std::cerr << "Successfully parsed!" << std::endl;
             data.push_back(temp);
-        } else {
-            std::cerr << "Failed to parse line" << std::endl;
         }
     }
-
-    std::cerr << "Total parsed: " << data.size() << " records" << std::endl;
 
     std::sort(data.begin(), data.end(), compareDataStruct);
 
