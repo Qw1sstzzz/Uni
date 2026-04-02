@@ -67,8 +67,9 @@ std::istream& operator>>(std::istream& in, StringIO&& dest) {
         return in;
     }
 
-    in >> DelimiterIO{'"'};
-    if (!in) {
+    char c;
+    if (!(in >> c) || c != '"') {
+        in.setstate(std::ios::failbit);
         return in;
     }
 
@@ -88,37 +89,37 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
         return in;
     }
 
-    std::streampos pos = in.tellg();
-
+    in >> std::ws;
     std::string num;
-    in >> num;
+    char c;
 
-    if (!in) {
-        return in;
+    while (in.get(c) && c != ':') {
+        num += c;
     }
+    in.putback(':');
 
     bool valid = false;
 
     size_t dotPos = num.find('.');
     if (dotPos != std::string::npos) {
-        bool hasDigitBefore = dotPos > 0 && std::isdigit(num[dotPos - 1]);
-        bool hasDigitAfter = dotPos + 1 < num.length() && std::isdigit(num[dotPos + 1]);
+        bool hasDigitBefore = dotPos > 0 && std::isdigit(static_cast<unsigned char>(num[dotPos - 1]));
+        bool hasDigitAfter = dotPos + 1 < num.length() && std::isdigit(static_cast<unsigned char>(num[dotPos + 1]));
 
         if (hasDigitBefore && hasDigitAfter) {
             size_t expPos = num.find_first_of("eE");
             if (expPos != std::string::npos && expPos > dotPos) {
-                char sign = num[expPos + 1];
-                size_t startExp = expPos + 1;
-                if (sign == '+' || sign == '-') {
-                    startExp++;
-                }
-
-                if (startExp < num.length() && std::isdigit(num[startExp])) {
-                    valid = true;
+                if (expPos + 1 < num.length()) {
+                    char sign = num[expPos + 1];
+                    size_t startExp = expPos + 1;
+                    if (sign == '+' || sign == '-') {
+                        startExp++;
+                    }
+                    if (startExp < num.length() && std::isdigit(static_cast<unsigned char>(num[startExp]))) {
+                        valid = true;
+                    }
                 }
             }
         }
-
     }
 
     if (valid) {
@@ -131,14 +132,10 @@ std::istream& operator>>(std::istream& in, DoubleSciIO&& dest) {
     }
 
     if (!valid) {
-        in.clear();
-        in.seekg(pos);
         in.setstate(std::ios::failbit);
     }
-
     return in;
 }
-
 
 struct LongLongIO {
     long long& ref;
@@ -150,21 +147,31 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         return in;
     }
 
-    std::streampos pos = in.tellg();
+    in >> std::ws;
+    std::string temp;
+    char c;
 
-    in >> dest.ref;
-    if (!in) {
-        return in;
+    while (in.get(c) && c != ':') {
+        temp += c;
     }
+    in.putback(':');
 
     char first = in.get();
     char second = in.get();
 
-    bool isValid = (first == 'l' || first == 'L') && (second == 'l' || second == 'L');
-
-    if (!isValid) {
-        in.clear();
-        in.seekg(pos);
+    bool lastIsL = (temp.back() == 'l' || temp.back() == 'L');
+    bool preLastIsL = (temp[temp.size() - 2] == 'l' || temp[temp.size() - 2] == 'L');
+    if (temp.size() >= 2 && lastIsL && preLastIsL) {
+        temp.pop_back();
+        temp.pop_back();
+        try {
+            dest.ref = std::stoll(temp);
+        }
+        catch (...) {
+            in.setstate(std::ios::failbit);
+        }
+    }
+    else {
         in.setstate(std::ios::failbit);
     }
 
@@ -179,61 +186,40 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
     }
 
     DataStruct temp;
-    bool key1_read = false;
-    bool key2_read = false;
-    bool key3_read = false;
 
-    in >> DelimiterIO{'('};
-    if (!in) {
+    if (!(in >> DelimiterIO{'('} >> DelimiterIO{':'})) {
         return in;
     }
 
     for (int i = 0; i < 3; ++i) {
-        in >> DelimiterIO{':'};
-        if (!in) {
-            return in;
-        }
+        std::string key;
+        in >> KeyIO{key};
 
-        std::string label;
-        in >> label;
-        if (!in) {
-            return in;
-        }
-
-        in >> DelimiterIO{' '};
-        if (!in) {
-            return in;
-        }
-
-        if (label == "key1" && !key1_read) {
+        if (key == "key1") {
             in >> DoubleSciIO{temp.key1};
-            key1_read = true;
         }
-        else if (label == "key2" && !key2_read) {
+        else if (key == "key2") {
             in >> LongLongIO{temp.key2};
-            key2_read = true;
         }
-        else if (label == "key3" && !key3_read) {
+        else if (key == "key3") {
             in >> StringIO{temp.key3};
-            key3_read = true;
         }
         else {
             in.setstate(std::ios::failbit);
-            return in;
+            break;
         }
 
-        if (!in) {
-            return in;
+
+        if (i < 2) {
+            in >> DelimiterIO{':'};
+            if (!in) {
+                break;
+            }
         }
     }
 
-    in >> DelimiterIO{':'} >> DelimiterIO{')'};
-
-    if (in && key1_read && key2_read && key3_read) {
-        dest = std::move(temp);
-    }
-    else {
-        in.setstate(std::ios::failbit);
+    if (in >> DelimiterIO{')'}) {
+        dest = temp;
     }
 
     return in;
@@ -265,11 +251,6 @@ public:
 
 
 std::ostream& operator<<(std::ostream& out, const DataStruct& source) {
-    std::ostream::sentry sentry(out);
-    if (!sentry) {
-        return out;
-    }
-
     iofmtguard guard(out);
 
     out << "(:key1 ";
@@ -295,25 +276,20 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 
 int main(void) {
     std::vector<DataStruct> data;
+    std::string line;
 
-    std::cout << "Start reading..." << std::endl;  // ← добавить
+    while (std::getline(std::cin, line)) {
+        if (line.empty()) continue;
 
-    std::copy(
-        std::istream_iterator<DataStruct>(std::cin),
-        std::istream_iterator<DataStruct>(),
-        std::back_inserter(data)
-    );
+        std::istringstream iss(line);
+        DataStruct temp;
 
-    std::cout << "Read " << data.size() << " records" << std::endl;  // ← добавить
-
-    if (std::cin.fail() && !std::cin.eof()) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (iss >> temp) {
+            data.push_back(temp);
+        }
     }
 
     std::sort(data.begin(), data.end(), compareDataStruct);
-
-    std::cout << "Sorted " << data.size() << " records" << std::endl;  // ← добавить
 
     std::copy(
         data.begin(),
