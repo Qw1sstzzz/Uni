@@ -22,7 +22,7 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
         return in;
     }
 
-    char c = '0';
+    char c;
     in >> c;
 
     if (in && c != dest.expected) {
@@ -272,11 +272,15 @@ bool compareDataStruct(const DataStruct& a, const DataStruct& b) {
 int main(void) {
     std::vector<DataStruct> data;
 
+    std::cout << "Start reading..." << std::endl;  // ← добавить
+
     std::copy(
         std::istream_iterator<DataStruct>(std::cin),
         std::istream_iterator<DataStruct>(),
         std::back_inserter(data)
     );
+
+    std::cout << "Read " << data.size() << " records" << std::endl;  // ← добавить
 
     if (std::cin.fail() && !std::cin.eof()) {
         std::cin.clear();
@@ -284,6 +288,8 @@ int main(void) {
     }
 
     std::sort(data.begin(), data.end(), compareDataStruct);
+
+    std::cout << "Sorted " << data.size() << " records" << std::endl;  // ← добавить
 
     std::copy(
         data.begin(),
