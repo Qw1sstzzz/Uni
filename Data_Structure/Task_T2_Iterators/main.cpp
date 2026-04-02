@@ -33,6 +33,26 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
 }
 
 
+std::istream& operator>>(std::istream& in, KeyIO&& dest) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    dest.ref.clear();
+    char c;
+
+    while (in >> c && std::isalnum(static_cast<usigned char>(c))) {
+        dest.ref += c;
+    }
+    if (dest.ref.empty()) {
+        in.setstate(std::ios::failbit);
+    }
+
+    return in;
+}
+
+
 struct StringIO {
     std::string& ref;
 } ;
