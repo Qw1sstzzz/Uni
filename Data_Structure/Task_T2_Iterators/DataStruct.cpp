@@ -209,7 +209,7 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
     int exponent = 0;
 
     if (data.key1 == 0.0) {
-        mantissa = 1.0;
+        mantissa = 0.0;
         exponent = 0;
     }
     else {
