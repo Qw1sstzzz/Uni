@@ -39,7 +39,7 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         return in;
     }
 
-    if (numberWithSuff.length() == 2 && (numberWithSuff[0] == "-" || numberWithSuff[0] == "+")) {
+    if (numberWithSuff.length() == 2 && (numberWithSuff[0] == '-' || numberWithSuff[0] == '+')) {
         in.setstate(std::ios::failbit);
         return in;
     }
@@ -84,6 +84,18 @@ std::istream& operator>>(std::istream& in, DoubleIO&& dest) {
     bool dotFound = false;
     bool hasDigitsBeforeDot = false;
     bool hasDigitsAfterDot = false;
+    bool isNegative = false;
+
+
+    in >> std::ws;
+    if (in.peek() == '-') {
+        isNegative = true;
+        in.get(ch);
+        mantissaBuffer += '-';
+    }
+    else if (in.peek() =='+') {
+        in.get(ch);
+    }
 
     while (in.get(ch)) {
         if (std::isdigit(static_cast<unsigned char>(ch))) {
