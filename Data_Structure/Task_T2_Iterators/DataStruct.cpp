@@ -39,6 +39,11 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         return in;
     }
 
+    if (numberWithSuff.length() == 2 && (numberWithSuff[0] == "-" || numberWithSuff[0] == "+")) {
+        in.setstate(std::ios::failbit);
+        return in;
+    }
+
     size_t length = numberWithSuff.length();
     char firstSuffChar = std::tolower(numberWithSuff[length - 2]);
     char secondSuffChar = std::tolower(numberWithSuff[length - 1]);
