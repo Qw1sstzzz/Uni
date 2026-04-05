@@ -241,7 +241,7 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
         }
         while (mantissa >= 10.0) {
             mantissa /= 10.0;
-            exponent++;
+            exponent = 0;
         }
     }
 
