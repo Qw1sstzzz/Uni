@@ -52,6 +52,11 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         numberWithSuff.pop_back();
         numberWithSuff.pop_back();
 
+        if (numberWithSuff.empty() || numberWithSuff == "-" || numberWithSuff == "+") {
+            in.setstate(std::ios::failbit);
+            return in;
+        }
+
         std::stringstream converter(numberWithSuff);
         long long result = 0;
 
