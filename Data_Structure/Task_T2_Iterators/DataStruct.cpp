@@ -39,7 +39,7 @@ std::istream& operator>>(std::istream& in, LongLongIO&& dest) {
         return in;
     }
 
-    if (numberWithSuff.length() == 2 && (numberWithSuff[0] == '-' || numberWithSuff[0] == '+')) {
+    if (numberWithSuff.length() == 3 && (numberWithSuff[0] == '-' || numberWithSuff[0] == '+')) {
         in.setstate(std::ios::failbit);
         return in;
     }
