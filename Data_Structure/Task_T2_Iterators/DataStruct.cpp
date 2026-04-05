@@ -84,12 +84,10 @@ std::istream& operator>>(std::istream& in, DoubleIO&& dest) {
     bool dotFound = false;
     bool hasDigitsBeforeDot = false;
     bool hasDigitsAfterDot = false;
-    bool isNegative = false;
 
 
     in >> std::ws;
     if (in.peek() == '-') {
-        isNegative = true;
         in.get(ch);
         mantissaBuffer += '-';
     }
@@ -241,7 +239,7 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
         }
         while (mantissa >= 10.0) {
             mantissa /= 10.0;
-            exponent = 0;
+            exponent++;
         }
     }
 
