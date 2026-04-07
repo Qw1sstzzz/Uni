@@ -16,7 +16,7 @@ int main() {
         if (line.empty()) {
             continue;
         }
-        std::stringstream ss(line);
+        std::istringstream ss(line);
         DataStruct temp;
 
         if (ss >> temp) {
