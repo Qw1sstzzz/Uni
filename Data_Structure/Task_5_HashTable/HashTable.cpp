@@ -35,11 +35,11 @@ void HashTable::insert(double key, double value) {
         return;
     }
 
-    size_t i = 0;
-    size_t idx = hash(key);
+    int i = 0;
+    int idx = hash(key);
 
     while (i < size_) {
-        size_t current = (idx + i) % size_;
+        int current = (idx + i) % size_;
 
         if (table_[current].status_ != OCCUPIED) {
             table_[current].key_ = new double(key);
@@ -59,4 +59,25 @@ void HashTable::insert(double key, double value) {
         }
         i++;
     }
+}
+
+int HashTable::find(double key) const {
+    int i = 0;
+    int idx = hash(key);
+
+    while (i < size_) {
+        int current = (idx + i) % size_;
+
+        if (table_[current].status_ == EMPTY) {
+            return -1;
+        }
+
+        if (table_[current].status_ == OCCUPIED && *table_[current].key_ == key) {
+            return current;
+        }
+
+        i++;
+    }
+
+    return -1;
 }
