@@ -92,3 +92,13 @@ void HashTable::remove(double key) {
         number_--;
     }
 }
+
+
+void HashTable::print() const {
+    for (size_t i = 0; i < size_; ++i) {
+        if (table_[i].status_ == OCCUPIED) {
+            std::cout << "Index " << i << ": key = " << *table_[i].key_;
+            std::cout << ", value = " << table_[i].value_ << std::endl;
+        }
+    }
+}
