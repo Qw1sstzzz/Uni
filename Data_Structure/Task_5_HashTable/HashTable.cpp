@@ -20,3 +20,10 @@ HashTable::~HashTable() {
     }
     delete[] table_;
 }
+
+size_t HashTable::hash(double key) const {
+    double absKey = std::abs(key);
+    double normalized = absKey / (absKey + 1);
+
+    return static_cast<size_t>(normalized * size_);
+}
