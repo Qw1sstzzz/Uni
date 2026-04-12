@@ -11,3 +11,12 @@ HashTable::HashTable(size_t size) {
         table_[i].status_ = EMPTY;
     }
 }
+
+HashTable::~HashTable() {
+    for (size_t i = 0; i < size_; ++i) {
+        if (table_[i].status_ == OCCUPIED) {
+            delete table_[i].key_;
+        }
+    }
+    delete[] table_;
+}
