@@ -81,3 +81,14 @@ int HashTable::find(double key) const {
 
     return -1;
 }
+
+void HashTable::remove(double key) {
+    int index = find(key);
+
+    if (index != -1) {
+        delete table_[index].key_;
+        table_[index].key_ = nullptr;
+        table_[index].status_ = DELETED;
+        number_--;
+    }
+}
