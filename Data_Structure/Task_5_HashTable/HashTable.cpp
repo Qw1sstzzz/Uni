@@ -27,3 +27,36 @@ size_t HashTable::hash(double key) const {
 
     return static_cast<size_t>(normalized * size_);
 }
+
+void HashTable::insert(double key, double value) {
+    double alpha = static_cast<double>(number_) / static_cast<double>(size_);
+
+    if (alpha >= 0.7) {
+        return;
+    }
+
+    size_t i = 0;
+    size_t idx = hash(key);
+
+    while (i < size_) {
+        size_t current = (idx + i) % size_;
+
+        if (table_[current].status_ != OCCUPIED) {
+            table_[current].key_ = new double(key);
+            table_[current].value_ = value;
+            table_[current].status_ = OCCUPIED;
+            number_++;
+            return;
+        }
+
+        if (table_[current].status_ == OCCUPIED) {
+            if (*table_[current].key_ == key) {
+                return;
+            }
+            else {
+                collisions_++;
+            }
+        }
+        i++;
+    }
+}
