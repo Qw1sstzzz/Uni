@@ -41,7 +41,7 @@ int main() {
         small.insert(0.2, 2.0);
         small.insert(0.3, 3.0);
         small.insert(0.4, 4.0);
-        std::cout << "Small table (size 4, should have only 2-3 elements):\n";
+        std::cout << "Small table (size 4):\n";
         small.print();
 
         std::cout << "\n--- Testing negative keys ---\n";
@@ -63,10 +63,8 @@ int main() {
 
         std::cout << "\n--- All tests passed ---\n";
 
-    } catch (const std::exception& e) {
-        std::cerr << "ERROR: " << e.what() << '\n';
-        return 1;
-    } catch (...) {
+    }
+    catch (...) {
         std::cerr << "UNKNOWN ERROR\n";
         return 1;
     }
