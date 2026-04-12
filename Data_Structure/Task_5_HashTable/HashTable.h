@@ -31,7 +31,9 @@ public:
     HashTable& operator=(const HashTable&) = delete;
     HashTable& operator=(HashTable&&) = delete;
 
-    size_t getCollisions() const;
+    size_t getCollisions() const {
+        return collisions_;
+    };
 
     size_t hash(double key) const;
     void insert(double key, double value);
