@@ -4,9 +4,9 @@
 #include <iostream>
 
 enum Status {
-    EMPTY,
-    OCCUPIED,
-    DELETED,
+    EMPTY = 0,
+    OCCUPIED = 1,
+    DELETED = 2,
 } ;
 
 struct Line {
@@ -33,7 +33,7 @@ public:
 
     size_t getCollisions() const;
 
-    size_t hashFuction (double key) const;
+    size_t hash(double key) const;
     void insert(double key, double value);
     bool find(double key) const;
     void remove(double key);
