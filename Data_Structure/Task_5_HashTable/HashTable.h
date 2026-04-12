@@ -35,7 +35,7 @@ public:
 
     size_t hash(double key) const;
     void insert(double key, double value);
-    bool find(double key) const;
+    int find(double key) const;
     void remove(double key);
     void print() const;
 } ;
