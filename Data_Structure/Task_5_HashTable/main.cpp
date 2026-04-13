@@ -13,6 +13,7 @@ int main() {
 
         std::cout << "Table after inserts:\n";
         ht.print();
+        std::cout << "Collisions: " << ht.getCollisions() << '\n';
 
         std::cout << "\n--- Testing find ---\n";
         std::cout << "Find 3.14: " << (ht.find(3.14) != -1 ? "found" : "not found") << '\n';

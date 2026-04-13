@@ -10,7 +10,7 @@ enum Status {
 } ;
 
 struct Line {
-    double* key_;
+    double key_;
     double value_;
     Status status_;
 } ;
