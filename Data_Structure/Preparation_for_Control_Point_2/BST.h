@@ -26,6 +26,7 @@ private:
     Node* root_;
 
     void clear(Node* node);
+    void output(std::ostream& out, const Node* node) const;
 public:
     BinarySearchTree();
     ~BinarySearchTree();
