@@ -55,7 +55,7 @@ bool BinarySearchTree<T>::insert(const T& key) {
             delete newNode;
             return false;
         }
-        else if (key < current->key) {
+        else if (key < current->key_) {
             current = current->left_;
         }
         else {
