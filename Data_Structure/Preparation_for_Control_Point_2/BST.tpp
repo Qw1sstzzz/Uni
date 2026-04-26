@@ -89,3 +89,42 @@ template <typename T>
 void BinarySearchTree<T>::output(std::ostream& out) const {
     output(out, root_);
 }
+
+template <typename T>
+int BinarySearchTree<T>::checkBalance(const Node* node, BalanceReport& report) const {
+    if (node == nullptr) {
+        return -1;
+    }
+
+    int leftHeight = checkBalance(node->left_, report);
+    int rightHeight = checkBalance(node->right_, report);
+
+    int balance = leftHeight - rightHeight;
+
+    if (balance > 1) {
+        // Левое поддерево выше правого
+        if (node->right_ == nullptr) {
+            report.missingRight++;
+        } else {
+            report.bothChildren++;
+        }
+        report.total++;
+    } else if (balance < -1) {
+        // Правое поддерево выше левого
+        if (node->left_ == nullptr) {
+            report.missingLeft++;
+        } else {
+            report.bothChildren++;
+        }
+        report.total++;
+    }
+
+    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+}
+
+template <typename T>
+BalanceReport BinarySearchTree<T>::findImbalancedNodes() const {
+    BalanceReport report;
+    checkBalance(root_, report);
+    return report;
+}
