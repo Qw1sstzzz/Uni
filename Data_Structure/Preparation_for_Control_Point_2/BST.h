@@ -1,6 +1,8 @@
 #ifndef BST_H
 #define BST_H
 
+#include <iostream>
+
 struct BalanceReport {
     int missingLeft = 0;
     int missingRight = 0;
