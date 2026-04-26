@@ -27,6 +27,7 @@ private:
 
     void clear(Node* node);
     void output(std::ostream& out, const Node* node) const;
+    checkBalance(const Node* node, BalanceReport& report) const;
 public:
     BinarySearchTree();
     ~BinarySearchTree();
