@@ -40,7 +40,7 @@ double area(const Polygon& poly) {
     long long sum = 0;
     for (int i = 0; i < n; ++i) {
         int j = (i + 1) % n;
-        sum += (static_cast<long long>(p[i].x) * p[i].y) - (static_cast<long long>(p[j].x) * p[j].y);
+        sum += (static_cast<long long>(p[i].x) * p[j].y) - (static_cast<long long>(p[j].x) * p[i].y);
     }
     return std::abs(sum) / 2.0;
 }
