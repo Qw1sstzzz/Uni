@@ -1,7 +1,14 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
+#include <numeric>
 #include <functional>
+#include <cmath>
+#include <iomanip>
+#include <cctype>
 
 
 struct Point {
@@ -21,8 +28,29 @@ bool operator==(const Polygon& a, const Polygon& b) {
     if (a.points.size() != b.points.size()) {
         return false;
     }
-    return std::equal(a.points.begin(), a.points.end(), b.points.begin());
+    return std::equal(a.points.begin(), a.points.end(), b.points.begin(), b.points.end());
 }
+
+
+double area(const Polygon& poly) {
+    const auto& p = poly.points;
+    int n = p.size();
+    if (n < 3) return 0.0;
+
+    long long sum = 0;
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        sum += (static_cast<long long>(p[i].x) * p[i].y) - (static_cast<long long>(p[j].x) * p[j].y);
+    }
+    return std::abs(sum) / 2.0;
+}
+
+struct AreaCalculator {
+    double operator()(const Polygon& p) const {
+        return area(p);
+    }
+} ;
+
 
 int main(void) {
 
