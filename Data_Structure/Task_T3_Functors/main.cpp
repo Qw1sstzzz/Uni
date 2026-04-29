@@ -376,6 +376,21 @@ int main(int argc, char* argv[]) {
             size_t removed = oldSize - polygons.size();
             std::cout << removed << std::endl;
         }
+
+        else if (cmd == "INTERSECTIONS") {
+            std::string polyLine;
+            std::getline(std::cin >> std::ws, polyLine);
+
+            Polygon target = parsePolygon(polyLine);
+            if (target.points.empty()) {
+                std::cout << "<INVALID COMMAND>\n";
+                continue;
+            }
+
+            int count = std::count_if(polygons.begin(), polygons.end(), IntersectWithTarget(target));
+            std::cout << count << std::endl;
+        }
+
         else {
             std::cout << "<INVALID COMMAND>\n";
         }
