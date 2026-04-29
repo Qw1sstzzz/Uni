@@ -275,8 +275,9 @@ int main(int argc, char* argv[]) {
                 if (isNumber) {
                     size_t n = std::stoul(sub);
                     if (n > 2) {
-                        auto pred = std::bind(isVertexCountEqual, _1, n);
-                        std::cout << std::count_if(polygons.begin(), polygons.end(), pred) << std::endl;
+                        double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
+                        AreaSummator(HasVertexCount(n)));
+                        std::cout << res << std::endl;
                     }
                     else {
                         std::cout << "<INVALID COMMAND>\n";
@@ -353,7 +354,8 @@ int main(int argc, char* argv[]) {
                 if (isNumber) {
                     size_t n = std::stoul(sub);
                     if (n > 2) {
-                        std::cout << std::count_if(polygons.begin(), polygons.end(), HasVertexCount(n)) << std::endl;
+                        auto pred = std::bind(isVertexCountEqual, _1, n);
+                        std::cout << std::count_if(polygons.begin(), polygons.end(), pred) << std::endl;
                     }
                     else {
                         std::cout << "<INVALID COMMAND>\n";
