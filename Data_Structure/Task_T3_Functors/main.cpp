@@ -52,6 +52,28 @@ struct AreaCalculator {
 } ;
 
 
+struct IsVertexCountOdd {
+    bool operator()(const Polygon& p) const {
+        return p.points.size() % 2 != 0;
+    }
+} ;
+
+struct IsVertexCountEven {
+    bool operator()(const Polygon& p) const {
+        return p.points.size() % 2 == 0;
+    }
+} ;
+
+struct HasVertexCount {
+    size_t num;
+    HasVertexCount(size_t count) : num(count) {}
+
+    bool operator()(const Polygon& p) const {
+        return p.points.size() == num;
+    }
+};
+
+
 int main(void) {
 
     return 0;
