@@ -28,7 +28,7 @@ bool operator==(const Polygon& a, const Polygon& b) {
     if (a.points.size() != b.points.size()) {
         return false;
     }
-    return std::equal(a.points.begin(), a.points.end(), b.points.begin(), b.points.end());
+    return std::equal(a.points.begin(), a.points.end(), b.points.begin());
 }
 
 
@@ -72,6 +72,36 @@ struct HasVertexCount {
         return p.points.size() == num;
     }
 };
+
+
+Polygon parsePolygon(const std::string& line) {
+    std::istringstream iss(line);
+    int n;
+    if (!(iss >> n) || n < 3) {
+        return {};
+    }
+
+    Polygon poly;
+
+    for (int i = 0; i < n; ++i) {
+        char open, semicolon, close;
+        int x, y;
+        if (!(iss >> open >> x >> semicolon >> y >> close)) {
+            return {};
+        }
+        if (open != '(' || semicolon != ';' || close != ')') {
+            return {};
+        }
+        poly.points.push_back({x, y});
+    }
+
+    std::string extra;
+    if (iss >> extra) {
+        return {};
+    }
+
+    return poly;
+}
 
 
 int main(void) {
