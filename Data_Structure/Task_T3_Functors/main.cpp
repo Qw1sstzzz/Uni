@@ -126,6 +126,7 @@ struct CompareByVertexes {
     }
 } ;
 
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Error: no filename provided\n";
@@ -158,17 +159,13 @@ int main(int argc, char* argv[]) {
 
             if (sub == "ODD") {
                 double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                [](double acc, const Polygon& p) {
-                    return IsVertexCountOdd()(p) ? acc + area(p) : acc;
-                });
+                AreaSummator(IsVertexCountOdd()));
                 std::cout << res << std::endl;
             }
 
             else if (sub == "EVEN") {
                 double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                [](double acc, const Polygon& p){
-                    return IsVertexCountEven()(p) ? acc + area(p) : acc;
-                });
+                AreaSummator(IsVertexCountEven()));
                 std::cout << res << std::endl;
             }
 
@@ -178,9 +175,9 @@ int main(int argc, char* argv[]) {
                     continue;
                 }
                 double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                [](double acc, const Polygon& p){
-                    return acc + area(p);
-                });
+                AreaSummator([](const Polygon& p){
+                    return true;
+                }));
                 std::cout << res / polygons.size() << std::endl;
             }
 
@@ -190,9 +187,7 @@ int main(int argc, char* argv[]) {
                     size_t n = std::stoul(sub);
                     if (n > 2) {
                         double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                        [n](double acc, const Polygon& p) {
-                            return HasVertexCount(n)(p) ? acc + area(p) : acc;
-                        });
+                        AreaSummator(HasVertexCount(n)));
                         std::cout << res << std::endl;
                     }
                     else {
@@ -215,18 +210,12 @@ int main(int argc, char* argv[]) {
             }
 
             if (sub == "AREA") {
-                auto it = std::max_element(polygons.begin(), polygons.end(),
-                [](const Polygon& a, const Polygon& b) {
-                    return area(a) < area(b);
-                });
+                auto it = std::max_element(polygons.begin(), polygons.end(), CompareByArea());
                 std::cout << area(*it) << std::endl;
             }
 
             else if (sub == "VERTEXES") {
-                auto it = std::max_element(polygons.begin(), polygons.end(),
-                [](const Polygon& a, const Polygon& b) {
-                    return a.points.size() < b.points.size();
-                });
+                auto it = std::max_element(polygons.begin(), polygons.end(), CompareByVertexes());
                 std::cout << it->points.size() << std::endl;
             }
 
@@ -245,18 +234,12 @@ int main(int argc, char* argv[]) {
             }
 
             if (sub == "AREA") {
-                auto it = std::min_element(polygons.begin(), polygons.end(),
-                [](const Polygon& a, const Polygon& b) {
-                    return area(a) < area(b);
-                });
+                auto it = std::min_element(polygons.begin(), polygons.end(), CompareByArea());
                 std::cout << area(*it) << std::endl;
             }
 
             else if (sub == "VERTEXES") {
-                auto it = std::min_element(polygons.begin(), polygons.end(),
-                [](const Polygon& a, const Polygon& b) {
-                    return a.points.size() < b.points.size();
-                });
+                auto it = std::min_element(polygons.begin(), polygons.end(), CompareByVertexes());
                 std::cout << it->points.size() << std::endl;
             }
 
