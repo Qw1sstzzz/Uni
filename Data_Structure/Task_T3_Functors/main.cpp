@@ -127,6 +127,16 @@ struct CompareByVertexes {
 } ;
 
 
+struct BothEqualToTarget {
+    Polygon target;
+
+    BothEqualToTarget(const Polygon& t) : target(t) {}
+
+    bool operator()(const Polygon& a, const Polygon& b) const {
+        return (a == target) && (b == target);
+    }
+} ;
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Error: no filename provided\n";
@@ -275,6 +285,25 @@ int main(int argc, char* argv[]) {
                     std::cout << "<INVALID COMMAND>\n";
                 }
             }
+        }
+
+        else if (cmd == "RMECHO") {
+            std::string polyLine;
+            std::getline(std::cin >> std::ws, polyLine);
+
+            Polygon target = parsePolygon(polyLine);
+            if (target.points.empty()) {
+                std::cout << "<INVALID COMMAND>\n";
+                continue;
+            }
+
+            size_t oldSize = polygons.size();
+
+            auto last = std::unique(polygons.begin(), polygons.end(), BothEqualToTarget(target));
+            polygons.erase(last, polygons.end());
+
+            size_t removed = oldSize - polygons.size();
+            std::cout << removed << std::endl;
         }
         else {
             std::cout << "<INVALID COMMAND>\n";
