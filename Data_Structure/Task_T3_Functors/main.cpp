@@ -114,6 +114,18 @@ struct AreaSummator {
     }
 } ;
 
+struct CompareByArea {
+    bool operator()(const Polygon& a, const Polygon& b) const {
+        return area(a) < area(b);
+    }
+} ;
+
+struct CompareByVertexes {
+    bool operator()(const Polygon& a, const Polygon& b) const {
+        return a.points.size() < b.points.size();
+    }
+} ;
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Error: no filename provided\n";
