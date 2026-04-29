@@ -104,6 +104,16 @@ Polygon parsePolygon(const std::string& line) {
 }
 
 
+struct AreaSummator {
+    std::function<bool(const Polygon&)> filter;
+
+    AreaSummator(std::function<bool(const Polygon&)> f) : filter(f) {}
+
+    double operator()(double acc, const Polygon& p) const {
+        return filter(p) ? acc + area(p) : acc;
+    }
+} ;
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Error: no filename provided\n";
