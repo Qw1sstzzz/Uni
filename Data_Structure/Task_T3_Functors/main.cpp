@@ -52,6 +52,62 @@ struct AreaCalculator {
 } ;
 
 
+int cross(const Point& a, const Point& b, const Point& c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+bool onSegment(const Point& a, const Point& b, const Point& c) {
+    return std::min(a.x, b.x) <= c.x && c.x <= std::max(a.x, b.x) &&
+           std::min(a.y, b.y) <= c.y && c.y <= std::max(a.y, b.y);
+}
+
+bool segmentIntersect(const Point& a, const Point& b, const Point& c, const Point& d) {
+    int o1 = cross(a, b, c);
+    int o2 = cross(a, b, d);
+    int o3 = cross(c, d, a);
+    int o4 = cross(c, d, b);
+
+    if ((o1 > 0 && o2 < 0 || o1 < 0 && o2 > 0) && (o3 > 0 && o4 < 0 || o3 < 0 && o4 > 0)) {
+        return true;
+    }
+
+    if (o1 == 0 && onSegment(a, b, c)) {
+        return true;
+    }
+    if (o2 == 0 && onSegment(a, b, d)) {
+        return true;
+    }
+    if (o4 == 0 && onSegment(c, d, a)) {
+        return true;
+    }
+    if (o4 == 0 && onSegment(c, d, b)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool polygonIntersect(const Polygon& a, const Polygon& b) {
+    size_t na = a.points.size();
+    size_t nb = b.points.size();
+
+    for (size_t i = 0; i < na; ++i) {
+        const Point& a1 = a.points[i];
+        const Point& a2 = a.points[(i + 1) % na];
+
+        for (size_t j = 0; j < nb; ++j) {
+            const Point& b1 = b.points[j];
+            const Point& b2 = b.points[(j + 1) % nb];
+
+            if (segmentIntersect(a1, a2, b1, b2)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
 struct IsVertexCountOdd {
     bool operator()(const Polygon& p) const {
         return p.points.size() % 2 != 0;
