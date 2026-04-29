@@ -193,6 +193,21 @@ struct BothEqualToTarget {
     }
 } ;
 
+
+struct IntersectWithTarget {
+    Polygon target;
+
+    IntersectWithTarget(const Polygon& t) : target(t) {};
+
+    bool operator()(const Polygon& p) const {
+        if (p == target) {
+            return false;
+        }
+        return polygonIntersect(p, target);
+    }
+} ;
+
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "Error: no filename provided\n";
