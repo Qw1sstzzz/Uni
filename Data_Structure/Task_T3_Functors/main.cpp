@@ -11,6 +11,9 @@
 #include <cctype>
 
 
+using namespace std::placeholders;
+
+
 struct Point {
     int x, y;
 } ;
@@ -77,7 +80,7 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c, const Poin
     if (o2 == 0 && onSegment(a, b, d)) {
         return true;
     }
-    if (o4 == 0 && onSegment(c, d, a)) {
+    if (o3 == 0 && onSegment(c, d, a)) {
         return true;
     }
     if (o4 == 0 && onSegment(c, d, b)) {
@@ -128,6 +131,11 @@ struct HasVertexCount {
         return p.points.size() == num;
     }
 };
+
+
+bool isVertexCountEqual(const Polygon& p, size_t n) {
+    return p.points.size() == n;
+}
 
 
 Polygon parsePolygon(const std::string& line) {
@@ -197,7 +205,7 @@ struct BothEqualToTarget {
 struct IntersectWithTarget {
     Polygon target;
 
-    IntersectWithTarget(const Polygon& t) : target(t) {};
+    IntersectWithTarget(const Polygon& t) : target(t) {}
 
     bool operator()(const Polygon& p) const {
         if (p == target) {
@@ -267,9 +275,8 @@ int main(int argc, char* argv[]) {
                 if (isNumber) {
                     size_t n = std::stoul(sub);
                     if (n > 2) {
-                        double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                        AreaSummator(HasVertexCount(n)));
-                        std::cout << res << std::endl;
+                        auto pred = std::bind(isVertexCountEqual, _1, n);
+                        std::cout << std::count_if(polygons.begin(), polygons.end(), pred) << std::endl;
                     }
                     else {
                         std::cout << "<INVALID COMMAND>\n";
