@@ -35,6 +35,7 @@ bool operator==(const Polygon& a, const Polygon& b) {
 }
 
 
+
 double area(const Polygon& poly) {
     const auto& p = poly.points;
     int n = p.size();
@@ -47,6 +48,9 @@ double area(const Polygon& poly) {
     }
     return std::abs(sum) / 2.0;
 }
+
+
+
 
 struct AreaCalculator {
     double operator()(const Polygon& p) const {
@@ -70,7 +74,7 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c, const Poin
     int o3 = cross(c, d, a);
     int o4 = cross(c, d, b);
 
-    if ((o1 > 0 && o2 < 0 || o1 < 0 && o2 > 0) && (o3 > 0 && o4 < 0 || o3 < 0 && o4 > 0)) {
+    if (((o1 > 0 && o2 < 0) || (o1 < 0 && o2 > 0)) && ((o3 > 0 && o4 < 0) || (o3 < 0 && o4 > 0))) {
         return true;
     }
 
@@ -90,6 +94,38 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c, const Poin
     return false;
 }
 
+bool pointInPolygon(const Point& pt, const Polygon& poly) {
+    int n = poly.points.size();
+    int count = 0;
+    for (int i = 0; i < n; ++i) {
+        const Point& a = poly.points[i];
+        const Point& b = poly.points[(i + 1) % n];
+
+        if (cross(a, b, pt) == 0 && onSegment(a, b, pt)) {
+            return true;
+        }
+
+        if ((a.y > pt.y) != (b.y > pt.y)) {
+            double x_intersect = a.x + static_cast<double>(pt.y - a.y) * (b.x - a.x) / (b.y - a.y);
+            if (pt.x < x_intersect) {
+                count++;
+            }
+        }
+    }
+    return count % 2 == 1;
+}
+
+
+struct IsPointInPolygon {
+    const Polygon& poly;
+    IsPointInPolygon(const Polygon& p) : poly(p) {}
+
+    bool operator()(const Point& pt) {
+        return pointInPolygon(pt, poly);
+    }
+} ;
+
+
 bool polygonIntersect(const Polygon& a, const Polygon& b) {
     size_t na = a.points.size();
     size_t nb = b.points.size();
@@ -107,6 +143,14 @@ bool polygonIntersect(const Polygon& a, const Polygon& b) {
             }
         }
     }
+
+    if (std::any_of(a.points.begin(), a.points.end(), IsPointInPolygon(b))) {
+        return true;
+    }
+    if (std::any_of(b.points.begin(), b.points.end(), IsPointInPolygon(a))) {
+        return true;
+    }
+
     return false;
 }
 
@@ -208,9 +252,6 @@ struct IntersectWithTarget {
     IntersectWithTarget(const Polygon& t) : target(t) {}
 
     bool operator()(const Polygon& p) const {
-        if (p == target) {
-            return false;
-        }
         return polygonIntersect(p, target);
     }
 } ;
@@ -264,7 +305,7 @@ int main(int argc, char* argv[]) {
                     continue;
                 }
                 double res = std::accumulate(polygons.begin(), polygons.end(), 0.0,
-                AreaSummator([](const Polygon& p){
+                AreaSummator([](const Polygon&){
                     return true;
                 }));
                 std::cout << res / polygons.size() << std::endl;
@@ -377,6 +418,11 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
+            if (polygons.empty()) {
+                std::cout << "<INVALID ARGUMENT>\n";
+                continue;
+            }
+
             size_t oldSize = polygons.size();
 
             auto last = std::unique(polygons.begin(), polygons.end(), BothEqualToTarget(target));
@@ -396,12 +442,19 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
+            if (polygons.empty()) {
+                std::cout << "<INVALID ARGUMENT>\n";
+                continue;
+            }
+
             int count = std::count_if(polygons.begin(), polygons.end(), IntersectWithTarget(target));
             std::cout << count << std::endl;
         }
 
         else {
             std::cout << "<INVALID COMMAND>\n";
+            std::string clearBuffer;
+            std::getline(std::cin >> std::ws, clearBuffer);
         }
     }
     return 0;
