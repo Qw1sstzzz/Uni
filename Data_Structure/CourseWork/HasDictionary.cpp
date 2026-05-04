@@ -43,3 +43,11 @@ size_t HashDictionary::nextPrime(size_t n) {
     }
     return n;
 }
+
+size_t HashDictionary::hash(const std::string& key) const {
+    size_t hashValue = 0;
+    for (char c : key) {
+        hashValue = hashValue * 31 + static_cast<size_t>(c);
+    }
+    return hashValue % size_;
+}
