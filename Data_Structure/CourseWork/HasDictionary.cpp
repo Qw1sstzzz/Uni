@@ -36,3 +36,10 @@ bool HashDictionary::isPrime(size_t n) {
     }
     return true;
 }
+
+size_t HashDictionary::nextPrime(size_t n) {
+    while (!isPrime(n)) {
+        ++n;
+    }
+    return n;
+}
