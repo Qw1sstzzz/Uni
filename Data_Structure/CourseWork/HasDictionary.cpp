@@ -51,3 +51,17 @@ size_t HashDictionary::hash(const std::string& key) const {
     }
     return hashValue % size_;
 }
+
+void HashDictionary::insertTranslation(std::vector<std::string>& translations, const std::string& translation) const {
+    for (size_t i = 0; i < translations.size(); ++i) {
+        if (translation == translations[i]) {
+            return;
+        }
+
+        if (translation < translations[i]) {
+            translations.insert(translations.begin() + i, translation);
+            return;
+        }
+    }
+    translations.push_back(translation);
+}
