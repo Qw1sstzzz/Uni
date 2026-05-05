@@ -40,3 +40,14 @@ bool TranslationList::insert(const std::string& word) {
     current->next_ = new Node(word);
     return true;
 }
+
+bool TranslationList::find(const std::string& word) const {
+    Node* current = head_;
+    while (current != nullptr) {
+        if (current->word_ == word) {
+            return true;
+        }
+        current = current->next_;
+    }
+    return false;
+}
