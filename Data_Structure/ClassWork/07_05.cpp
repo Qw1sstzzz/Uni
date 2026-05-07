@@ -18,6 +18,7 @@ struct Counter {
     }
 } ;
 
+/*
 int main(void) {
     auto plusFive = std::bind(sum, 5, _1);
 
@@ -61,8 +62,6 @@ int main(void) {
     std::cout << std::endl;
 }
 
-
-/*
 std::vector<std::string> filtered;
 std::copy_if(words.begin(), words.end(),
     std::back_inserter(filtered),
@@ -115,3 +114,50 @@ auto longest = std::max_element(words.begin(), words.end(),
         return a.length() < b.length();
     });
 */
+struct LengthOf {
+    int operator()(const std::string s) {
+        return s.length();
+    }
+} ;
+
+
+struct FirstChar {
+    char operator()(const std::string s) {
+        return s[0];
+    }
+} ;
+
+int main(void) {
+    std::vector<int> v{1, 2, 3, 4};
+
+    auto expression = std::bind(std::multiplies<int>(),
+        std::bind(std::plus<int>(), _1, _2),
+        std::bind(std::minus<int>(), _1, _2)
+    );
+
+    std::cout << expression(5, 2) << std::endl;
+
+    std::vector<std::string> v1{ "qwe", "rt", "y" };
+    std::vector<int> v2;
+    // std::for_each(v1.begin(), v1.end(), [&v2](const std::string& s) { v2.push_back(s.length()); });
+
+    auto it = std::transform(v1.begin(), v1.end(), std::back_inserter(v2), LengthOf());
+    std::for_each(v2.begin(), v2.end(), [](int x){
+        std::cout << x << ' ';
+    });
+
+
+    std::vector<std::string> words = {"cat", "elephant", "dog", "bird", "ant"};
+    std::vector<std::string> filtered;
+    std::vector<char> first_chars;
+    std::copy_if(words.begin(), words.end(), std::back_inserter(filtered), [](std::string word){
+        return word.length() <= 3;
+    });
+
+    auto f = std::transform(filtered.begin(), filtered.end(), std::back_inserter(first_chars), FirstChar());
+
+    std::for_each(first_chars.begin(), first_chars.end(), [](char x){
+        std::cout << x << ' ';
+    });
+
+}
