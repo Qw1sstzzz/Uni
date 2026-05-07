@@ -51,3 +51,28 @@ bool TranslationList::find(const std::string& word) const {
     }
     return false;
 }
+
+bool TranslationList::remove(const std::string& word) {
+    if (head_ == nullptr) {
+        return false;
+    }
+
+    if (head_->word_ == word) {
+        Node* temp = head_;
+        head_ = head_->next_;
+        delete temp;
+        return true;
+    }
+
+    Node* current = head_;
+    while (current->next_ != nullptr) {
+        if (current->next_->word_ == word) {
+            Node* temp = current->next_;
+            current->next_ = current->next_->next_;
+            delete temp;
+            return true;
+        }
+        current = current->next_;
+    }
+    return false;
+}
