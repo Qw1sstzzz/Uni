@@ -85,3 +85,25 @@ bool HashDictionary::insert(const std::string& key, const std::string& translati
     }
     return false;
 }
+
+
+const TranslationList* HashDictionary::search(const std::string& key) const {
+    size_t idx = hash(key);
+    size_t i = 0;
+
+    while (i < size_) {
+        size_t current = (idx + i*i) % size_;
+
+        if (table_[current].status_ == EMPTY) {
+            return nullptr;
+        }
+
+        if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
+            return &table_[current].translations_;
+        }
+
+        ++i;
+    }
+
+    return nullptr;
+}
