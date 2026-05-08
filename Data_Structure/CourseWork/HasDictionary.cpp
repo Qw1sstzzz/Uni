@@ -37,12 +37,14 @@ bool HashDictionary::isPrime(size_t n) {
     return true;
 }
 
+
 size_t HashDictionary::nextPrime(size_t n) {
     while (!isPrime(n)) {
         ++n;
     }
     return n;
 }
+
 
 size_t HashDictionary::hash(const std::string& key) const {
     size_t hashValue = 0;
@@ -52,16 +54,34 @@ size_t HashDictionary::hash(const std::string& key) const {
     return hashValue % size_;
 }
 
-void HashDictionary::insertTranslation(std::vector<std::string>& translations, const std::string& translation) const {
-    for (size_t i = 0; i < translations.size(); ++i) {
-        if (translation == translations[i]) {
-            return;
+
+bool HashDictionary::insert(const std::string& key, const std::string& translation) {
+    double alpha = static_cast<double>(count_) / static_cast<double>(size_);
+
+    if (alpha >= MAX_LOAD_FACTOR) {
+        resize();
+    }
+
+    size_t idx = hash(key);
+    size_t i = 0;
+
+    while (i < size_) {
+        size_t current = (idx + i*i) % size_;
+        if (table_[current].status_ != OCCUPIED) {
+            table_[current].key_ = key;
+            table_[current].translations_.insert(translation);
+            table_[current].status_ = OCCUPIED;
+            ++count_;
+            collisions_ += i;
+            return true;
         }
 
-        if (translation < translations[i]) {
-            translations.insert(translations.begin() + i, translation);
-            return;
+        if (table_[current].key_ == key) {
+            collisions_ += i;
+            return table_[current].translations_.insert(translation);
         }
+
+        ++i;
     }
-    translations.push_back(translation);
+    return false;
 }
