@@ -143,3 +143,40 @@ void HashDictionary::print() const {
         }
     }
 }
+
+
+void HashDictionary::resize() {
+    size_t oldSize = size_;
+    Line* oldTable = table_;
+
+    size_ = nextPrime(oldSize*2);
+    table_ = new Line[size_];
+    count_ = 0;
+    collisions_ = 0;
+
+    for (size_t i = 0; i < size_; ++i) {
+        table_[i].status_ = EMPTY;
+    }
+
+    for (size_t i = 0; i < oldSize; ++i) {
+        if (oldTable[i].status_ == OCCUPIED) {
+            size_t idx = hash(oldTable[i].key_);
+            size_t j = 0;
+
+            while (j < size_) {
+                size_t current = (idx + j*j) % size_;
+                if (table_[current].status_ == EMPTY) {
+                    table_[current].key_ = oldTable[i].key_;
+                    table_[current].translations_ = std::move(oldTable[i].translations_);
+                    table_[current].status_ = OCCUPIED;
+
+                    ++count_;
+                    collisions_ += j;
+                    break;
+                }
+                ++j;
+            }
+        }
+    }
+    delete[] oldTable;
+}
