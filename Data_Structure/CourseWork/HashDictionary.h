@@ -41,6 +41,7 @@ public:
 
     size_t hash(const std::string& key) const;
     bool insert(const std::string& key, const std::string& translation);
+    bool removeTranslation(const std::string& key, const std::string& translation);
     const TranslationList* search(const std::string& key) const;
     bool remove(const std::string& key);
     void print() const;
