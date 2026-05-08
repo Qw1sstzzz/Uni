@@ -132,3 +132,14 @@ bool HashDictionary::remove(const std::string& key) {
 
     return false;
 }
+
+
+void HashDictionary::print() const {
+    for (size_t i = 0; i < size_; ++i) {
+        if (table_[i].status_ == OCCUPIED) {
+            std::cout << table_[i].key_ << ": ";
+            table_[i].translations_.print();
+            std::cout << std::endl;
+        }
+    }
+}
