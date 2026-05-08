@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include "TranslationList.h"
 
 enum Status {
     EMPTY = 0,
@@ -13,7 +13,7 @@ enum Status {
 
 struct Line {
     std::string key_;
-    std::vector<std::string> translations_;
+    TranslationList translations_;
     Status status_;
 } ;
 
@@ -30,7 +30,6 @@ private:
     static bool isPrime(size_t n);
     static size_t nextPrime(size_t n);
     void resize();
-    void insertTranslation(std::vector<std::string>& translations, const std::string& translation) const;
 public:
     HashDictionary(size_t size = DEFAULT_SIZE);
     ~HashDictionary();
@@ -42,7 +41,7 @@ public:
 
     size_t hash(const std::string& key) const;
     bool insert(const std::string& key, const std::string& translation);
-    const std::vector<std::string>* search(const std::string& key) const;
+    const TranslationList* search(const std::string& key) const;
     bool remove(const std::string& key);
     void print() const;
 
