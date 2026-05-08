@@ -107,3 +107,28 @@ const TranslationList* HashDictionary::search(const std::string& key) const {
 
     return nullptr;
 }
+
+
+bool HashDictionary::remove(const std::string& key) {
+    size_t idx = hash(key);
+    size_t i = 0;
+
+    while (i < size_) {
+        size_t current = (idx + i*i) % size_;
+
+        if (table_[current].status_ == EMPTY) {
+            return false;
+        }
+
+        if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
+            table_[current].translations_.clear();
+            table_[current].status_ = DELETED;
+            --count_;
+            return true;
+        }
+
+        ++i;
+    }
+
+    return false;
+}
