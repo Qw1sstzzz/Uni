@@ -22,7 +22,8 @@ public:
     TranslationList(const TranslationList& other) = delete;
     TranslationList& operator=(const TranslationList& other) = delete;
 
-
+    TranslationList(TranslationList&& other) noexcept;
+    TranslationList& operator=(TranslationList&& other) noexcept;
 
     bool insert(const std::string& word);
     bool find(const std::string& word) const;

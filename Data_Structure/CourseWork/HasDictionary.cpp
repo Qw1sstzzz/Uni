@@ -17,9 +17,6 @@ HashDictionary::~HashDictionary() {
     delete[] table_;
 }
 
-HashDictionary::HashDictionary(HashDictionary&& other) :  {
-
-}
 
 bool HashDictionary::isPrime(size_t n) {
     if (n < 2) {
