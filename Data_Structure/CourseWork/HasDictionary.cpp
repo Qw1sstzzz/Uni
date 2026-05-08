@@ -1,5 +1,5 @@
 #include "HashDictionary.h"
-
+#include "Errors.h"
 
 HashDictionary::HashDictionary(size_t size) {
     size_ = nextPrime(size);
@@ -55,7 +55,39 @@ size_t HashDictionary::hash(const std::string& key) const {
 }
 
 
+
+static void validateKey(const std::string& key) {
+    if (key.empty()) {
+        throw ValidationError("Key is empty");
+    }
+
+    for (char c : key) {
+        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
+            throw ValidationError("Key must contain only English: " + key);
+        }
+    }
+}
+
+static void validateTranslation(const std::string& translation) {
+    if (translation.empty()) {
+        throw ValidationError("Translation is empty");
+    }
+
+    for (char c : translation) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+            throw ValidationError("Translation mustn't be in English: " + translation);
+        }
+        if (c >= '0' && c <= '9') {
+            throw ValidationError("Translation mustn't contain digits: " + translation);
+        }
+    }
+}
+
+
 bool HashDictionary::insert(const std::string& key, const std::string& translation) {
+    validateKey(key);
+    validateTranslation(translation);
+
     double alpha = static_cast<double>(count_) / static_cast<double>(size_);
 
     if (alpha >= MAX_LOAD_FACTOR) {
