@@ -1,8 +1,11 @@
 #include <iostream>
+#include <windows.h>
 #include "HashDictionary.h"
 #include "Errors.h"
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+
     HashDictionary dict;
 
     std::cout << "=== Testing INSERT ===\n";
