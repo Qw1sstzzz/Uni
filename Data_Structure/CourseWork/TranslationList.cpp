@@ -76,3 +76,7 @@ bool TranslationList::remove(const std::string& word) {
     }
     return false;
 }
+
+bool TranslationList::empty() const {
+    return head_ == nullptr;
+}
