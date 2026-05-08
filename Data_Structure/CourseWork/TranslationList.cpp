@@ -93,3 +93,11 @@ void TranslationList::print() const {
         current = current->next_;
     }
 }
+
+void TranslationList::clear() {
+    while (head_ != nullptr) {
+        Node* temp = head_;
+        head_ = head_->next_;
+        delete temp;
+    }
+}
