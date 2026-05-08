@@ -35,9 +35,10 @@ public:
     ~HashDictionary();
 
     HashDictionary(const HashDictionary& other) = delete;
-    HashDictionary(HashDictionary&& other) = delete;
     HashDictionary& operator=(const HashDictionary& other) = delete;
-    HashDictionary& operator=(HashDictionary&& other) = delete;
+
+    HashDictionary(HashDictionary&& other) noexcept;
+    HashDictionary& operator=(HashDictionary&& other) noexcept;
 
     size_t hash(const std::string& key) const;
     bool insert(const std::string& key, const std::string& translation);
