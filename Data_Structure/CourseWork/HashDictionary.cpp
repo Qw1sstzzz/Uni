@@ -119,6 +119,37 @@ bool HashDictionary::insert(const std::string& key, const std::string& translati
 }
 
 
+bool HashDictionary::removeTranslation(const std::string& key, const std::string& translation) {
+    const TranslationList* list = search(key);
+    if (list == nullptr) {
+        throw KeyNotFoundException("Key not found: " + key);
+    }
+
+    size_t idx = hash(key);
+    size_t i = 0;
+    while (i < size_) {
+        size_t current = (idx + i*i) % size_;
+
+        if (table_[current].status_ == EMPTY) {
+            return false;
+        }
+
+        if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
+            bool removed = table_[current].translations_.remove(translation);
+            if (removed && table_[current].translations_.empty()) {
+                table_[current].status_ = DELETED;
+                --count_;
+            }
+            return removed;
+        }
+
+        ++i;
+    }
+
+    return false;
+}
+
+
 const TranslationList* HashDictionary::search(const std::string& key) const {
     size_t idx = hash(key);
     size_t i = 0;
