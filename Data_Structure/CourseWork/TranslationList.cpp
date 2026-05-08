@@ -80,3 +80,16 @@ bool TranslationList::remove(const std::string& word) {
 bool TranslationList::empty() const {
     return head_ == nullptr;
 }
+
+void TranslationList::print() const {
+    Node* current = head_;
+    bool first = true;
+    while (current != nullptr) {
+        if (!first) {
+            std::cout << ", ";
+        }
+        std::cout << current->word_;
+        first = false;
+        current = current->next_;
+    }
+}
