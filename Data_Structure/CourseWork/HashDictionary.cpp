@@ -120,11 +120,6 @@ bool HashDictionary::insert(const std::string& key, const std::string& translati
 
 
 bool HashDictionary::removeTranslation(const std::string& key, const std::string& translation) {
-    const TranslationList* list = search(key);
-    if (list == nullptr) {
-        throw KeyNotFoundException("Key not found: " + key);
-    }
-
     size_t idx = hash(key);
     size_t i = 0;
     while (i < size_) {
@@ -146,7 +141,7 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
         ++i;
     }
 
-    return false;
+    throw KeyNotFoundException("Key not found: " + key);
 }
 
 
