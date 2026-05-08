@@ -1,10 +1,25 @@
 #include "TranslationList.h"
 
+
 TranslationList::TranslationList() : head_(nullptr) {}
 
 TranslationList::~TranslationList() {
     clear();
 }
+
+TranslationList::TranslationList(TranslationList&& other) noexcept : head_(other.head_) {
+    other.head_ = nullptr;
+}
+
+TranslationList& TranslationList::operator=(TranslationList&& other) noexcept {
+    if (this != &other) {
+        clear();
+        head_ = other.head_;
+        other.head_ = nullptr;
+    }
+    return *this;
+}
+
 
 bool TranslationList::insert(const std::string& word) {
     if (head_ == nullptr) {
@@ -41,6 +56,7 @@ bool TranslationList::insert(const std::string& word) {
     return true;
 }
 
+
 bool TranslationList::find(const std::string& word) const {
     Node* current = head_;
     while (current != nullptr) {
@@ -51,6 +67,7 @@ bool TranslationList::find(const std::string& word) const {
     }
     return false;
 }
+
 
 bool TranslationList::remove(const std::string& word) {
     if (head_ == nullptr) {
@@ -77,9 +94,11 @@ bool TranslationList::remove(const std::string& word) {
     return false;
 }
 
+
 bool TranslationList::empty() const {
     return head_ == nullptr;
 }
+
 
 void TranslationList::print() const {
     Node* current = head_;
@@ -93,6 +112,7 @@ void TranslationList::print() const {
         current = current->next_;
     }
 }
+
 
 void TranslationList::clear() {
     while (head_ != nullptr) {
