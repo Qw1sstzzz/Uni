@@ -110,7 +110,11 @@ bool HashDictionary::insert(const std::string& key, const std::string& translati
 
         if (table_[current].key_ == key) {
             collisions_ += i;
-            return table_[current].translations_.insert(translation);
+            bool inserted = table_[current].translations_.insert(translation);
+            if (!inserted) {
+                throw DuplicateTranslationException("Translation already exists: \"" + translation + "\" for word \"" + key + "\"");
+            }
+            return true;
         }
 
         ++i;
