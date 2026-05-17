@@ -3,7 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "TranslationList.h"
+#include <set>
+#include <vector>
 
 enum Status {
     EMPTY = 0,
@@ -13,7 +14,7 @@ enum Status {
 
 struct Line {
     std::string key_;
-    TranslationList translations_;
+    std::set<std::string> translations_;
     Status status_;
 } ;
 
@@ -23,7 +24,7 @@ private:
     static const size_t DEFAULT_SIZE = 11;
 
     size_t size_;
-    Line* table_;
+    std::vector<Line> table_;
     size_t count_;
     size_t collisions_;
 
@@ -39,10 +40,9 @@ public:
     HashDictionary& operator=(const HashDictionary& other) = delete;
     HashDictionary& operator=(HashDictionary&& other) = delete;
 
-    size_t hash(const std::string& key) const;
     bool insert(const std::string& key, const std::string& translation);
     bool removeTranslation(const std::string& key, const std::string& translation);
-    const TranslationList* search(const std::string& key) const;
+    const std::set<std::string>* search(const std::string& key) const;
     bool remove(const std::string& key);
     void print() const;
 
