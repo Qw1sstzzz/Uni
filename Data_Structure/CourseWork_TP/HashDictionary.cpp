@@ -123,7 +123,7 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
                 table_[current].status_ = DELETED;
                 --count_;
             }
-            return removed;
+            return (erased > 0);
         }
 
         ++i;
@@ -184,19 +184,26 @@ void HashDictionary::print() const {
     for (size_t i = 0; i < size_; ++i) {
         if (table_[i].status_ == OCCUPIED) {
             std::cout << table_[i].key_ << ": ";
-            table_[i].translations_.print();
-            std::cout << std::endl;
+
+            auto start = table_[i].translations_.begin();
+            for (start; start != table_[i].translations_.end(); ++start) {
+                if (start != table_[i].translations_.begin()) {
+                    std::cout << ", ";
+                    std::cout << *start;
+                }
+            }
+
         }
     }
 }
 
 
 void HashDictionary::resize() {
+    std::vector<Line> oldTable = std::move(table_);
     size_t oldSize = size_;
-    Line* oldTable = table_;
 
-    size_ = nextPrime(oldSize*2);
-    table_ = new Line[size_];
+    size_ = nextPrime(oldSize * 2);
+    table_.resize(size_);
     count_ = 0;
     collisions_ = 0;
 
@@ -212,17 +219,16 @@ void HashDictionary::resize() {
             while (j < size_) {
                 size_t current = (idx + j*j) % size_;
                 if (table_[current].status_ == EMPTY) {
-                    table_[current].key_ = oldTable[i].key_;
+                    table_[current].key_ = std::move(oldTable[i].key_);
                     table_[current].translations_ = std::move(oldTable[i].translations_);
                     table_[current].status_ = OCCUPIED;
-
                     ++count_;
                     collisions_ += j;
                     break;
                 }
+
                 ++j;
             }
         }
     }
-    delete[] oldTable;
 }
