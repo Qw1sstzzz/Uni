@@ -185,7 +185,7 @@ bool HashDictionary::remove(const std::string& key) {
 
 
 void HashDictionary::print() const {
-    auto printSet = [](const std::set<std::string>* s){
+    auto printSet = [](const std::set<std::string>& s){
         bool first = true;
         for (const auto& word : s) {
             if (!first) {
