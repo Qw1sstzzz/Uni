@@ -185,10 +185,21 @@ bool HashDictionary::remove(const std::string& key) {
 
 
 void HashDictionary::print() const {
+    auto printSet = [](const std::set<std::string>* s){
+        bool first = true;
+        for (const auto& word : s) {
+            if (!first) {
+                std::cout << ", ";
+            }
+            std::cout << word;
+            first = false;
+        }
+    };
+
     for (size_t i = 0; i < size_; ++i) {
         if (table_[i].status_ == OCCUPIED) {
             std::cout << table_[i].key_ << ": ";
-            table_[i].translations_.print();
+            printSet(table_[i].translations_);
             std::cout << std::endl;
         }
     }
