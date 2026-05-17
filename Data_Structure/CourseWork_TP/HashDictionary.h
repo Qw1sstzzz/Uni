@@ -14,6 +14,13 @@ enum Status {
 } ;
 
 
+struct Line {
+    std::string key_;
+    std::set<std::string> translations_;
+    Status status_;
+} ;
+
+
 struct KeyEquals {
     const std::string& target_;
     KeyEquals(const std::string& t) : target_(t) {}
@@ -22,12 +29,6 @@ struct KeyEquals {
     }
 } ;
 
-
-struct Line {
-    std::string key_;
-    std::set<std::string> translations_;
-    Status status_;
-} ;
 
 class HashDictionary {
 private:
