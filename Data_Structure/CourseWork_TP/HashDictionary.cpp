@@ -122,12 +122,12 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
         }
 
         if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
-            bool removed = table_[current].translations_.remove(translation);
-            if (removed && table_[current].translations_.empty()) {
+            size_t erased = table_[current].translations_.erase(translation);
+            if (erased > 0 && table_[current].translations_.empty()) {
                 table_[current].status_ = DELETED;
                 --count_;
             }
-            return removed;
+            return (erased > 0);
         }
 
         ++i;
