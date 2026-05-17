@@ -13,6 +13,16 @@ enum Status {
     DELETED = 2,
 } ;
 
+
+struct KeyEquals {
+    const std::string& target_;
+    KeyEquals(const std::string& t) : target_(t) {}
+    bool operator()(const Line& line) const {
+        return line.status_ == OCCUPIED && line.key_ == target_;
+    }
+} ;
+
+
 struct Line {
     std::string key_;
     std::set<std::string> translations_;
