@@ -1,6 +1,8 @@
 #include "HashDictionary.h"
 #include "Errors.h"
 
+#include <algorithm>
+
 HashDictionary::HashDictionary(size_t size) : size_(nextPrime(size)), table_(size_), count_(0), collisions_(0) {
     for (size_t i = 0; i < size_; ++i) {
         table_[i].status_ = EMPTY;
@@ -187,13 +189,13 @@ bool HashDictionary::remove(const std::string& key) {
 void HashDictionary::print() const {
     auto printSet = [](const std::set<std::string>& s){
         bool first = true;
-        for (const auto& word : s) {
+        std::for_each(s.begin(), s.end(), [&first](const std::string& word) {
             if (!first) {
                 std::cout << ", ";
             }
             std::cout << word;
             first = false;
-        }
+        });
     };
 
     for (size_t i = 0; i < size_; ++i) {
