@@ -148,7 +148,7 @@ const std::set<std::string>* HashDictionary::search(const std::string& key) cons
             return nullptr;
         }
 
-        if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
+        if (KeyEquals(key)(table_[current])) {
             return &table_[current].translations_;
         }
 
