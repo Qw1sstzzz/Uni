@@ -5,6 +5,7 @@
 #include <string>
 #include <set>
 #include <vector>
+#include <functional>
 
 enum Status {
     EMPTY = 0,
@@ -31,6 +32,7 @@ private:
     static bool isPrime(size_t n);
     static size_t nextPrime(size_t n);
     void resize();
+    size_t hash(const std::string& key) const;
 public:
     HashDictionary(size_t size = DEFAULT_SIZE);
     ~HashDictionary();
