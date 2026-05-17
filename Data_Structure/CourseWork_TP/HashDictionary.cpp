@@ -98,8 +98,8 @@ bool HashDictionary::insert(const std::string& key, const std::string& translati
 
         if (table_[current].key_ == key) {
             collisions_ += i;
-            bool inserted = table_[current].translations_.insert(translation);
-            if (!inserted) {
+            auto inserted = table_[current].translations_.insert(translation);
+            if (!inserted.second) {
                 throw DuplicateTranslationException("Translation already exists: \"" + translation + "\" for word \"" + key + "\"");
             }
             return true;
@@ -137,7 +137,7 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
 }
 
 
-const TranslationList* HashDictionary::search(const std::string& key) const {
+const std::set<std::string>* HashDictionary::search(const std::string& key) const {
     size_t idx = hash(key);
     size_t i = 0;
 
