@@ -1,21 +1,14 @@
 #include "HashDictionary.h"
 #include "Errors.h"
 
-HashDictionary::HashDictionary(size_t size) {
-    size_ = nextPrime(size);
-    table_ = new Line[size_];
-    count_ = 0;
-    collisions_ = 0;
-
+HashDictionary::HashDictionary(size_t size) : size_(nextPrime(size)), table_(size_), count_(0), collisions_(0) {
     for (size_t i = 0; i < size_; ++i) {
         table_[i].status_ = EMPTY;
     }
 }
 
 
-HashDictionary::~HashDictionary() {
-    delete[] table_;
-}
+HashDictionary::~HashDictionary() = default;
 
 
 bool HashDictionary::isPrime(size_t n) {
