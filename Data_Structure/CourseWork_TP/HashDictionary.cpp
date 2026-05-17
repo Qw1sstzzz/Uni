@@ -39,15 +39,6 @@ size_t HashDictionary::nextPrime(size_t n) {
 }
 
 
-size_t HashDictionary::hash(const std::string& key) const {
-    size_t hashValue = 0;
-    for (char c : key) {
-        hashValue = hashValue * 31 + static_cast<size_t>(c);
-    }
-    return hashValue % size_;
-}
-
-
 
 static void validateKey(const std::string& key) {
     if (key.empty()) {
@@ -127,8 +118,8 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
         }
 
         if (table_[current].status_ == OCCUPIED && table_[current].key_ == key) {
-            bool removed = table_[current].translations_.remove(translation);
-            if (removed && table_[current].translations_.empty()) {
+            size_t erased = table_[current].translations_.erase(translation);
+            if ((erased > 0) && table_[current].translations_.empty()) {
                 table_[current].status_ = DELETED;
                 --count_;
             }
@@ -142,7 +133,7 @@ bool HashDictionary::removeTranslation(const std::string& key, const std::string
 }
 
 
-const TranslationList* HashDictionary::search(const std::string& key) const {
+const std::set<std::string>* HashDictionary::search(const std::string& key) const {
     size_t idx = hash(key);
     size_t i = 0;
 
